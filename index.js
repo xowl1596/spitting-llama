@@ -11,6 +11,7 @@ imgCmds = ['캬악!', '칵!', '카악!','캭!'];
 helpMsg = 
 `침뱉기 : 캬악 칵 카악 캭 (!붙이면 이미지가 나옵니다.)
 경고 : 건들지마!
+소스코드 : https://github.com/xowl1596/spitting-llama
 `
 
 
