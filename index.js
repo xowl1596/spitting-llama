@@ -4,6 +4,7 @@ const client = new Client({ intents: [
   Intents.FLAGS.GUILD_MESSAGES,
 ] });
 
+let fs = require('fs');
 
 cmds = ['캬악', '칵', '카악', '캭'];
 imgCmds = ['캬악!', '칵!', '카악!','캭!'];
@@ -40,4 +41,6 @@ client.on('messageCreate', message => {
 
 });
 
-client.login('token here');
+fs.readFile('token', 'utf8', function(err, data){
+  client.login(data);
+});
