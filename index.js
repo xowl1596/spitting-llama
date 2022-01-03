@@ -3,6 +3,7 @@ const client = new Client({ intents: [
   Intents.FLAGS.GUILDS, 
   Intents.FLAGS.GUILD_MESSAGES,
 ] });
+require("dotenv").config();
 
 let fs = require('fs');
 
@@ -48,7 +49,5 @@ client.on('messageCreate', message => {
       message.channel.send({ files: [{ attachment: './llama2.png' }] });
     }
 });
-
-fs.readFile('token', 'utf8', function(err, data){
-  client.login(data);
-});
+console.log(process.env.token);
+client.login(process.env.token);
