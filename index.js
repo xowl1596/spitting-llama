@@ -46,12 +46,7 @@ client.on('messageCreate', message => {
     }
 
     if (message.content.startsWith('마법의 라마고동님')) {
-      if (!message.content.endsWith('요?')){
-        message.channel.send('무엄하다! 요? 를 붙여서 질문하거라!!');
-      }
-      else {
-        message.channel.send('||' + magicGodong[Math.floor(Math.random() * magicGodong.length)] + '||');
-      }
+        message.channel.send(magicGodong[Math.floor(Math.random() * magicGodong.length)]);
     }
 
     if (cmds.includes(message.content)){
