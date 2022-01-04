@@ -29,7 +29,6 @@ client.on('ready', () => {
 });
 
 client.on('messageCreate', message => {
-    console.log(message.)
     if (message.content === '라마도움말') {
       message.channel.send(helpMsg);
     }
