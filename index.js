@@ -19,6 +19,7 @@ helpMsg =
 핥기 : 낼름 냘름 핥 핥짝 핥쨕
 경고 : 건들지마!
 매력어필 : 난멋져
+질문 : 마법의 라마고동님 (질문)
 소스코드 : https://github.com/xowl1596/spitting-llama
 `
 
