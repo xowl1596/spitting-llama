@@ -1,7 +1,7 @@
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [
-  Discord.Intents.FLAGS.GUILDS, 
-  Discord.Intents.FLAGS.GUILD_MESSAGES,
+  Intents.FLAGS.GUILDS, 
+  Intents.FLAGS.GUILD_MESSAGES,
 ] });
 
 require("dotenv").config();
