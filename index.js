@@ -41,6 +41,10 @@ client.on('messageCreate', message => {
       message.channel.send({ files: [{ attachment: './llama3.jpg' }] });
     }
 
+    if (message.content === '난예뻐') {
+      message.channel.send({ files: [{ attachment: './llama4.jpg' }] });
+    }
+
     if (message.content.startsWith('마법의 라마고동님')) {
       if (!message.content.endsWith('요?')){
         message.channel.send('무엄하다! 요? 를 붙여서 질문하거라!!');
