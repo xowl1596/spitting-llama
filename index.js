@@ -1,5 +1,5 @@
-const Discord = require('discord.js');
-const client = new Discord.Client({ intents: [
+const { Client, Intents } = require('discord.js');
+const client = new Client({ intents: [
   Discord.Intents.FLAGS.GUILDS, 
   Discord.Intents.FLAGS.GUILD_MESSAGES,
 ] });
@@ -29,6 +29,7 @@ client.on('ready', () => {
 });
 
 client.on('messageCreate', message => {
+    console.log(message.)
     if (message.content === '라마도움말') {
       message.channel.send(helpMsg);
     }
