@@ -12,6 +12,7 @@ const http = require('http');
 cmds = ['캬악', '칵', '카악', '캭'];
 imgCmds = ['캬악!', '칵!', '카악!','캭!'];
 img2Cmds = ['낼름', '냘름', '핥', '핥짝', '핥쨕'];
+magicGodong = ['언젠가는','다시 한번 물어봐','그럼!','그래','아니','안돼','가만히 있어','그것도 안돼','No','Yes','뭐라고?']
 
 helpMsg = 
 `침뱉기 : 캬악 칵 카악 캭 (!붙이면 이미지가 나옵니다.)
@@ -37,6 +38,10 @@ client.on('messageCreate', message => {
 
     if (message.content === '난멋져') {
       message.channel.send({ files: [{ attachment: './llama3.jpg' }] });
+    }
+
+    if (message.content.startsWith('마법의 라마고동님')) {
+      message.channel.send(magicGodong[Math.floor(Math.random() * magicGodong.length)]);
     }
 
     if (cmds.includes(message.content)){
