@@ -3,9 +3,11 @@ const client = new Client({ intents: [
   Intents.FLAGS.GUILDS, 
   Intents.FLAGS.GUILD_MESSAGES,
 ] });
+
 require("dotenv").config();
 
 let fs = require('fs');
+const http = require('http');
 
 cmds = ['캬악', '칵', '카악', '캭'];
 imgCmds = ['캬악!', '칵!', '카악!','캭!'];
@@ -51,3 +53,11 @@ client.on('messageCreate', message => {
 });
 console.log(process.env.token);
 client.login(process.env.token);
+
+const server = http.createServer((req, res) => {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+  res.end('Bot is active now');
+});
+
+server.listen(process.env.PORT || 5000);
