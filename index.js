@@ -9,6 +9,12 @@ require("dotenv").config();
 let fs = require('fs');
 const http = require('http');
 
+let fwordList = [];
+fs.readFile('fword_list.txt', 'utf8', (err, data)=>{
+  fwordList = data.split('\n');
+  console.log("욕설 필터링 준비 완료")
+});
+
 cmds = ['캬악', '칵', '카악', '캭'];
 imgCmds = ['캬악!', '칵!', '카악!','캭!'];
 img2Cmds = ['낼름', '냘름', '핥', '핥짝', '핥쨕'];
@@ -25,7 +31,7 @@ helpMsg =
 
 
 client.on('ready', () => {
-  console.log('준비되었습니다!');
+  console.log('[llama Bot] : bot is start now!!!');
 });
 
 client.on('messageCreate', message => {
@@ -60,8 +66,14 @@ client.on('messageCreate', message => {
     if (img2Cmds.includes(message.content)){
       message.channel.send({ files: [{ attachment: './llama2.png' }] });
     }
+    
+    for(let i = 0 ; i < fwordList.length; i++){
+      if(message.content.indexOf(fwordList[i]) !== -1){
+        message.channel.send('욕하지 마라! 퉤엣!');
+        break;
+      }
+    }
 });
-console.log(process.env.TOKEN);
 client.login(process.env.TOKEN);
 
 const server = http.createServer((req, res) => {
