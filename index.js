@@ -51,8 +51,8 @@ client.on('messageCreate', message => {
       message.channel.send({ files: [{ attachment: './llama2.png' }] });
     }
 });
-console.log(process.env.token);
-client.login(process.env.token);
+console.log(process.env.TOKEN);
+client.login(process.env.TOKEN);
 
 const server = http.createServer((req, res) => {
   res.statusCode = 200;
