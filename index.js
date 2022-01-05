@@ -69,7 +69,6 @@ client.on('messageCreate', message => {
 
     if(message.content.indexOf('38') !== -1){
       message.channel.send('욕하지 마라! 퉤엣!');
-      break;
     }
     
     // for(let i = 0 ; i < fwordList.length; i++){
