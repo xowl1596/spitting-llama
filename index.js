@@ -66,6 +66,10 @@ client.on('messageCreate', message => {
     if (img2Cmds.includes(message.content)){
       message.channel.send({ files: [{ attachment: './llama2.png' }] });
     }
+
+    if(message.content.indexOf('38') !== -1){
+      message.channel.send('건들지 마라! 퉤엣!');
+    }
     
     // for(let i = 0 ; i < fwordList.length; i++){
     //   if(message.content.indexOf(fwordList[i]) !== -1){
