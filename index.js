@@ -21,7 +21,7 @@ helpMsg =
 경고 : 건들지마!
 매력어필 : 난멋져 난예뻐
 질문 : 마법의 라마고동님 (질문)
-뭐먹지 : 라마님 오늘 뭐먹을까요?
+뭐먹지 : 라마님 오늘 뭐먹을까요 (뒤에 ?붙여도 작동)
 소스코드 : https://github.com/xowl1596/spitting-llama
 `
 
@@ -47,7 +47,7 @@ client.on('messageCreate', message => {
       message.channel.send({ files: [{ attachment: './llama4.jpg' }] });
     }
 
-    if (message.content === '라마님 오늘 뭐먹을까요?') {
+    if (message.content.startsWith('라마님 오늘 뭐먹을까요')) {
       message.channel.send(foods[Math.floor(Math.random() * foods.length)]);
     }
 
