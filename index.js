@@ -13,6 +13,7 @@ cmds = ['캬악', '칵', '카악', '캭'];
 imgCmds = ['캬악!', '칵!', '카악!','캭!'];
 img2Cmds = ['낼름', '냘름', '핥', '핥짝', '핥쨕'];
 magicGodong = ['언젠가는','다시 한번 물어봐','그럼!','그래', '당연하지', '물론', '...푸흡!!', '아니','안돼','가만히 있어','그것도 안돼','No','Yes','뭐라고?', '퉤엣']
+foods = ['스팸에 햇반!!', '치킨은 언제나 옳지', '햄버거 머겅', '피자가 아니라 핏ㅈ짜!', '뜨끄~은한 국밥 든드~은하게 먹자']
 
 helpMsg = 
 `침뱉기 : 캬악 칵 카악 캭 (!붙이면 이미지가 나옵니다.)
@@ -43,6 +44,10 @@ client.on('messageCreate', message => {
 
     if (message.content === '난예뻐') {
       message.channel.send({ files: [{ attachment: './llama4.jpg' }] });
+    }
+
+    if (message.content === '라마님 오늘 뭐먹을까요') {
+      message.channel.send(foods[Math.floor(Math.random() * foods.length)]);
     }
 
     if (message.content.startsWith('마법의 라마고동님')) {
