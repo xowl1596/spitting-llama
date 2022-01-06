@@ -21,6 +21,7 @@ helpMsg =
 경고 : 건들지마!
 매력어필 : 난멋져 난예뻐
 질문 : 마법의 라마고동님 (질문)
+뭐먹지 : 라마님 오늘 뭐먹을까요?
 소스코드 : https://github.com/xowl1596/spitting-llama
 `
 
