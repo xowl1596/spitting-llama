@@ -9,11 +9,6 @@ require("dotenv").config();
 let fs = require('fs');
 const http = require('http');
 
-let fwordList = [];
-fs.readFile('fword_list.txt', 'utf8', (err, data)=>{
-  fwordList = data.split('\n');
-  console.log("욕설 필터링 준비 완료")
-});
 
 cmds = ['캬악', '칵', '카악', '캭'];
 imgCmds = ['캬악!', '칵!', '카악!','캭!'];
