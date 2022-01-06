@@ -1,3 +1,4 @@
+const DBClient = require('pg').Client;
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [
   Intents.FLAGS.GUILDS, 
@@ -8,6 +9,26 @@ require("dotenv").config();
 
 let fs = require('fs');
 const http = require('http');
+
+const dbconfig = { 
+  host: process.env.DB_HOST, 
+  user: process.env.DB_USER, 
+  password: process.env.DB_PW, 
+  database: process.env.DB_NAME, 
+  port: process.env.DB_PORT, 
+  ssl: { rejectUnauthorized: false } 
+};
+
+const dbClient = new DBClient(dbconfig) 
+
+dbClient.connect(err => { 
+  if (err) { 
+    console.log('Failed to connect db ' + err) 
+  } 
+  else { 
+    console.log('Connect to db done!') 
+  } 
+});
 
 cmds = ['캬악', '칵', '카악', '캭'];
 imgCmds = ['캬악!', '칵!', '카악!','캭!'];
