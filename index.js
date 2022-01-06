@@ -9,7 +9,6 @@ require("dotenv").config();
 let fs = require('fs');
 const http = require('http');
 
-
 cmds = ['캬악', '칵', '카악', '캭'];
 imgCmds = ['캬악!', '칵!', '카악!','캭!'];
 img2Cmds = ['낼름', '냘름', '핥', '핥짝', '핥쨕'];
@@ -61,6 +60,17 @@ client.on('messageCreate', message => {
     if (img2Cmds.includes(message.content)){
       message.channel.send({ files: [{ attachment: './llama2.png' }] });
     }
+
+    if(message.content.indexOf('38') !== -1){
+      message.channel.send('건들지 마라! 퉤엣!');
+    }
+    
+    // for(let i = 0 ; i < fwordList.length; i++){
+    //   if(message.content.indexOf(fwordList[i]) !== -1){
+    //     message.channel.send('욕하지 마라! 퉤엣!');
+    //     break;
+    //   }
+    // }
 });
 client.login(process.env.TOKEN);
 
