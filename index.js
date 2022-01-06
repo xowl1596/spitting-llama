@@ -47,7 +47,7 @@ client.on('messageCreate', message => {
       message.channel.send({ files: [{ attachment: './llama4.jpg' }] });
     }
 
-    if (message.content === '라마님 오늘 뭐먹을까요') {
+    if (message.content === '라마님 오늘 뭐먹을까요?') {
       message.channel.send(foods[Math.floor(Math.random() * foods.length)]);
     }
 
