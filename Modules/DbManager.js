@@ -131,8 +131,10 @@ module.exports = class DbManager{
         else if(!searchGuildResult.rows[0].is_active) {return 'INACTIVE';}
 
         //채굴 실행
-        let mineKey = `SELECT mine_key FROM guilds WHERE id = ${guildId}`;
-        
+        let mineKeyQuery = `SELECT mine_key FROM guilds WHERE id = ${guildId}`;
+        let mineKeyResult = await this.client.query(mineKeyQuery);
+        let mineKey = mineKeyResult.rows[0].mine_key;
+        console.log(`${mineKey}   ${nonce}`)
         if(mineKey == nonce){ //채굴 성공
             let minigSuccessQuery = `UPDATE wallets SET coin = coin + 500 WHERE guild_id=${guildId} AND user_id=${userId}`;
             this.client.query(minigSuccessQuery);
