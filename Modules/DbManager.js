@@ -28,7 +28,7 @@ module.exports = class DbManager{
         let searchResult = await this.client.query(searchGuildQuery);
 
         if (searchResult.rowCount == 0) {
-            this.llamacoinInsertGuild([id, name]);
+            this.insertGuild([id, name]);
             return 'SUCCESS';
         }
         else if (!searchResult.rows[0].is_active){
@@ -39,7 +39,7 @@ module.exports = class DbManager{
         }
     }
 
-    llamacoinInsertGuild(values){
+    insertGuild(values){
         let insertGuildQuery = `INSERT INTO guilds(id, name, is_active) VALUES($1, $2,true)`;
         this.client.query(insertGuildQuery, values);
     }
