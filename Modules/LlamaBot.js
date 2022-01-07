@@ -43,8 +43,8 @@ module.exports = class LlamaBot{
           
         client.on('messageCreate', message => {
             this.mining(message);
-            // this.processingCommands(message);
-            // this.processingLlamacoinCommands(message);
+            this.processingCommands(message);
+            this.processingLlamacoinCommands(message);
         });
           
         client.login(process.env.TOKEN);
