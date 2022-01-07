@@ -41,7 +41,7 @@ module.exports = class LlamaBot{
         });
           
         client.on('messageCreate', message => {
-            //this.processingCommands(message);
+            this.processingCommands(message);
             this.processingLlamacoinCommands(message);
         });
           
