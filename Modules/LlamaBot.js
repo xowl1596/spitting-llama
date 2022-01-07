@@ -1,5 +1,5 @@
 const { Client, Intents } = require('discord.js');
-const DbManager = require('./Modules/DbManager.js');
+const DbManager = require('./DbManager.js');
 const client = new Client({ intents: [
   Intents.FLAGS.GUILDS, 
   Intents.FLAGS.GUILD_MESSAGES,
