@@ -1,7 +1,5 @@
 const fs = require('fs');
 const http = require('http');
-
-
 const Llamabot = require('./Modules/LlamaBot.js');
 require("dotenv").config();
 
