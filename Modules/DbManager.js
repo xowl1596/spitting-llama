@@ -134,7 +134,7 @@ module.exports = class DbManager{
         let mineKey = `SELECT mine_key FROM guilds WHERE id = ${guildId}`;
         
         if(mineKey == nonce){ //채굴 성공
-            let minigSuccessQuery = `UPDATE wallet SET coin = coin + 500 WHERE guild_id=${guildId} AND user_id=${userId}`;
+            let minigSuccessQuery = `UPDATE wallets SET coin = coin + 500 WHERE guild_id=${guildId} AND user_id=${userId}`;
             this.client.query(minigSuccessQuery);
 
             let newMineKey = Math.floor(Math.random() * 100);
@@ -143,9 +143,9 @@ module.exports = class DbManager{
 
             return 'MINING_SUCCESS';
         }else{ //채굴 실패
-            let minigFailQuery = `UPDATE wallet SET coin = coin + 1 WHERE guild_id=${guildId} AND user_id=${userId}`;
+            let minigFailQuery = `UPDATE wallets SET coin = coin + 1 WHERE guild_id=${guildId} AND user_id=${userId}`;
             this.client.query(minigFailQuery);
-            
+
             return 'MINING_FAIL';
         }
 
