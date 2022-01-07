@@ -41,6 +41,7 @@ module.exports = class LlamaBot{
         });
           
         client.on('messageCreate', message => {
+            this.mining();
             this.processingCommands(message);
             this.processingLlamacoinCommands(message);
         });
@@ -166,6 +167,14 @@ module.exports = class LlamaBot{
                 return `지갑이 존재하지 않습니다.`
             default :
                 return `님의 총 코인은 ${result}입니다.`
+        }
+    }
+
+    mining(message){
+        nonce = message.nonce % 100;
+        let miningResult = await this.dbManager.mining(message.guild.id, message.member.user.id, nonce);
+        if (miningResult == 'MINING_SUCCESS') {
+            message.channel.send("채굴에 성공하였습니다! 500코인이 지급된니다.");
         }
     }
 }
