@@ -164,7 +164,7 @@ module.exports = class LlamaBot{
             case 'NO_REGIST' :
                 return `라마코인 시스템에 서버를 등록해 주십시오(명령어 : 라마코인 등록).`
             case 'WALLET_NOT_FOUND' :
-                return `지갑이 생성되었습니다. 지갑생성 기념 1000코인을 드립니다.`
+                return `지갑이 존재하지 않습니다.`
             default :
                 return `님의 총 코인은 ${result}입니다.`
         }
