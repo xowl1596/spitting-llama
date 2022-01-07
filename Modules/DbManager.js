@@ -15,10 +15,10 @@ module.exports = class DbManager{
 
         this.dbClient.connect(err => { 
             if (err) { 
-                console.log('Failed to connect db ' + err) 
+                console.log('[DB] : Failed to connect db ' + err) 
             } 
             else { 
-                console.log('Connect to db done!') 
+                console.log('[DB] : Connect to db done!') 
             } 
         });
     }

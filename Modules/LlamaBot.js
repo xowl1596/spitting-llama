@@ -1,4 +1,5 @@
 const { Client, Intents } = require('discord.js');
+const DbManager = require('./Modules/DbManager.js');
 const client = new Client({ intents: [
   Intents.FLAGS.GUILDS, 
   Intents.FLAGS.GUILD_MESSAGES,
@@ -6,6 +7,7 @@ const client = new Client({ intents: [
 
 module.exports = class LlamaBot{
     constructor() {
+        this.dbManager = new DbManager();
         this.cmds = ['캬악', '칵', '카악', '캭'];
         this.imgCmds = ['캬악!', '칵!', '카악!','캭!'];
         this.img2Cmds = ['낼름', '냘름', '핥', '핥짝', '핥쨕'];
