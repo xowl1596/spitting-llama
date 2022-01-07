@@ -72,7 +72,7 @@ module.exports = class DbManager{
         }
     }
 
-    async createWallet(guildId, userId){
+    async createWallet(guildId, userId, userName){
         let result = '';
         //서버가 등록되어 있거나 활성화되어있는 지 확인
         let searchGuildQuery = `SELECT id, is_active FROM guilds WHERE id = ${guildId}`;
@@ -83,8 +83,8 @@ module.exports = class DbManager{
 
         
         let searchWalletQuery = `SELECT * FROM wallets WHERE guild_id = ${guildId} AND user_id = ${userId}`;
-        let createWalletQuery = `INSERT INTO wallets(guild_id, user_id, coin) VALUES($1, $2, $3)`;
-        let createWalletValues = [guildId, userId, 1000];
+        let createWalletQuery = `INSERT INTO wallets(guild_id, user_id, user_name, coin) VALUES($1, $2, $3, $4)`;
+        let createWalletValues = [guildId, userId, userName, 1000];
         
         //이미 생성된 지갑이 있는 지 확인
         let searchResult = await this.client.query(searchWalletQuery);
@@ -113,8 +113,8 @@ module.exports = class DbManager{
         //해당 유저의 지갑이 있는지 확인
         let searchWalletQuery = `SELECT * FROM wallets WHERE guild_id = ${guildId} AND user_id = ${userId}`;
         let searchWalletResult = await this.client.query(searchWalletQuery);
-        if(searchWalletResult.rowCount == 0) { 
-            result = 'WALLET_NOT_FOUND'; 
+        if(searchWalletResult.rowCount == 0) {
+            result = 'WALLET_NOT_FOUND';
         }
         else{
             result = searchWalletResult.rows[0].coin;
@@ -151,6 +151,5 @@ module.exports = class DbManager{
         }
 
     }
-
 
 }

@@ -104,7 +104,7 @@ module.exports = class LlamaBot{
                 message.channel.send(inactivateMessage);
                 break;
             case '라마코인 지갑생성' :
-                let createWalletResult = await this.dbManager.createWallet(message.guild.id, message.member.user.id)
+                let createWalletResult = await this.dbManager.createWallet(message.guild.id, message.member.user.id, message.member.user.username)
                 let createWalletMessage = this.getLlamacoinCreateWalletMessage(createWalletResult);
                 message.channel.send(createWalletMessage);
                 break;
