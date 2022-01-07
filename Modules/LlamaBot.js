@@ -1,4 +1,10 @@
-export default class CommandManager{
+const { Client, Intents } = require('discord.js');
+const client = new Client({ intents: [
+  Intents.FLAGS.GUILDS, 
+  Intents.FLAGS.GUILD_MESSAGES,
+] });
+
+module.exports = class LlamaBot{
     constructor() {
         this.cmds = ['캬악', '칵', '카악', '캭'];
         this.imgCmds = ['캬악!', '칵!', '카악!','캭!'];
@@ -11,12 +17,25 @@ export default class CommandManager{
             '매력어필 : 난멋져 난예뻐\n'+
             '질문 : 마법의 라마고동님 (질문)\n'+
             '소스코드 : https://github.com/xowl1596/spitting-llama';  
+        this.startBot();
     }
     
-    checkAndExecuteCommands(content){
-        switch (content){
+    startBot(){
+        client.on('ready', () => {
+            console.log('[llama Bot] : bot is start now!!!');
+        });
+          
+        client.on('messageCreate', message => {
+            this.checkAndExecuteCommands(message);
+        });
+          
+        client.login(process.env.TOKEN);
+    }
+
+    checkAndExecuteCommands(message){
+        switch (message.content){
             case '라마도움말' :
-                message.channel.send(helpMsg);
+                message.channel.send(this.helpMsg);
                 break;
             case '건들지마!' :
                 message.channel.send('건들면 침뱉을거야!');
@@ -29,19 +48,19 @@ export default class CommandManager{
                 break;
         }
     
-        if (content.startsWith('마법의 라마고동님')) {
-            message.channel.send(magicGodong[Math.floor(Math.random() * magicGodong.length)]);
+        if (message.content.startsWith('마법의 라마고동님')) {
+            message.channel.send(this.magicGodong[Math.floor(Math.random() * this.magicGodong.length)]);
         }
     
-        if (cmds.includes(content)){
+        if (this.cmds.includes(message.content)){
             message.channel.send('퉤엣!');
         }
     
-        if (imgCmds.includes(content)){
+        if (this.imgCmds.includes(message.content)){
             message.channel.send({ files: [{ attachment: './llama.png' }] });
         }
     
-        if (img2Cmds.includes(content)){
+        if (this.img2Cmds.includes(message.content)){
             message.channel.send({ files: [{ attachment: './llama2.png' }] });
         }
     }
