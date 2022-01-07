@@ -85,7 +85,8 @@ module.exports = class LlamaBot{
     async processingLlamacoinCommands(message){
         switch(message.content) {
             case '라마코인 도움말' :
-                message.channel.send();
+                message.channel.send(this.llamacoinHelpMsg);
+                break;
             case '라마코인 등록':
                 let registerResult = await this.dbManager.llamacoinRegister(message.guild.id, message.guild.name);
                 let registerMassage = this.getLlamacoinRegisterMessage(registerResult);
@@ -122,7 +123,7 @@ module.exports = class LlamaBot{
             case 'NO_REGIST' :
                 return `라마코인 시스템에 서버가 등록해 주십시오(명령어 : 라마코인 등록).`
             case 'SUCCESS' :
-                return `라마코인 시스템이 활성화 되었습니다.`
+                return `라마코인 시스템이 비활성화 되었습니다.`
         }
     }
 }
