@@ -82,7 +82,6 @@ module.exports = class LlamaBot{
     }
     
     async processingLlamacoinCommands(message){
-        console.log(message.member.user);
         switch(message.content) {
             case '라마코인 도움말' :
                 message.channel.send(this.llamacoinHelpMsg);
