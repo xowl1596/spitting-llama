@@ -23,7 +23,7 @@ module.exports = class DbManager{
         });
     }
 
-    async llamacoinRegister(id, name){
+    async register(id, name){
         let searchGuildQuery = `SELECT id, is_active FROM guilds WHERE id = ${id}`;
         let searchResult = await this.client.query(searchGuildQuery);
 
@@ -44,7 +44,7 @@ module.exports = class DbManager{
         this.client.query(insertGuildQuery, values);
     }
 
-    async llamacoinActiveGuild(id){
+    async activeGuild(id){
         let searchGuildQuery = `SELECT id, is_active FROM guilds WHERE id = ${id}`;
         let activeGuildQuery = `UPDATE guilds SET is_active = true WHERE id = ${id}`;
         
@@ -58,7 +58,7 @@ module.exports = class DbManager{
         }
     }
 
-    async llamacoinInactiveGuild(id){
+    async inactiveGuild(id){
         let searchGuildQuery = `SELECT id, is_active FROM guilds WHERE id = ${id}`;
         let activeGuildQuery = `UPDATE guilds SET is_active = false WHERE id = ${id}`;
         
@@ -72,5 +72,54 @@ module.exports = class DbManager{
         }
     }
 
-    async llamacoinCreateWallet(){}
+    async createWallet(guildId, userId){
+        let result = '';
+        //서버가 등록되어 있거나 활성화되어있는 지 확인
+        let searchGuildQuery = `SELECT id, is_active FROM guilds WHERE id = ${guildId}`;
+        let searchGuildResult = await this.client.query(searchGuildQuery);
+
+        if(searchGuildResult.rowCount == 0) { result = 'NO_REGIST'; }
+        else if(!searchGuildResult.rows[0].is_active) {result = 'INACTIVE';}
+
+        
+        let searchWalletQuery = `SELECT * FROM wallets WHERE guild_id = ${guildId} AND user_id = ${userId}`;
+        let createWalletQuery = `INSERT INTO wallets(guild_id, user_id, coin) VALUES($1, $2, $3)`;
+        let createWalletValues = [guildId, userId, 1000];
+        
+        //이미 생성된 지갑이 있는 지 확인
+        let searchResult = await this.client.query(searchWalletQuery);
+        
+        //지갑이 없으면 생성, 아니면 그대로 둠
+        if(searchResult.rowCount == 0) {
+            this.client.query(createWalletQuery, createWalletValues);
+            result = 'SUCCESS';
+        }
+        else{
+            result = 'ALREADY_EXIST';
+        }
+        
+        return result;
+    }
+
+    async getWallet(guildId, userId){
+        let result = '';
+        //서버가 등록되어 있거나 활성화되어있는 지 확인
+        let searchGuildQuery = `SELECT id, is_active FROM guilds WHERE id = ${guildId}`;
+        let searchGuildResult = await this.client.query(searchGuildQuery);
+
+        if(searchGuildResult.rowCount == 0) { result = 'NO_REGIST'; }
+        else if(!searchGuildResult.rows[0].is_active) {result = 'INACTIVE';}
+
+        //해당 유저의 지갑이 있는지 확인
+        let searchWalletQuery = `SELECT * FROM wallets WHERE guild_id = ${guildId} AND user_id = ${userId}`;
+        let searchWalletResult = await this.client.query(searchWalletQuery);
+        if(searchWalletResult.rowCount == 0) { 
+            result = 'WALLET_NOT_FOUND'; 
+        }
+        else{
+            result = searchWalletResult.rows[0].coin;
+        }
+
+        return result;
+    }
 }

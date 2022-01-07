@@ -29,10 +29,9 @@ module.exports = class LlamaBot{
         
         this.llamacoinHelpMsg = 
             '라마코인 등록 : 라마코인 시스템에 서버를 등록시키고 활성화 합니다.\n'+
-            '아래 기능은 개발중입니다.\n'+
             '라마코인 활성화 / 비활성화 : 라마코인 시스템을 활성화/비활성화 합니다.\n'+
             '라마코인 지갑생성 : 해당서버에 자신의 지갑을 생성합니다. 지갑을 생성해야 라마코인 시스템이 사용 가능합니다.\n'+
-            '코인확인 : 자신이 얼마나 코인을 가지고 있는지 확인합니다.\n';
+            '라마코인 잔액확인 : 자신이 얼마나 코인을 가지고 있는지 확인합니다.\n';
         this.startBot();
     }
     
@@ -42,7 +41,7 @@ module.exports = class LlamaBot{
         });
           
         client.on('messageCreate', message => {
-            this.processingCommands(message);
+            //this.processingCommands(message);
             this.processingLlamacoinCommands(message);
         });
           
@@ -83,26 +82,35 @@ module.exports = class LlamaBot{
     }
     
     async processingLlamacoinCommands(message){
+        console.log(message.member.user);
         switch(message.content) {
             case '라마코인 도움말' :
                 message.channel.send(this.llamacoinHelpMsg);
                 break;
             case '라마코인 등록':
-                let registerResult = await this.dbManager.llamacoinRegister(message.guild.id, message.guild.name);
+                let registerResult = await this.dbManager.register(message.guild.id, message.guild.name);
                 let registerMassage = this.getLlamacoinRegisterMessage(registerResult);
                 message.channel.send(registerMassage);
                 break;
             case '라마코인 활성화' :
-                let activateResult = await this.dbManager.llamacoinActiveGuild(message.guild.id);
+                let activateResult = await this.dbManager.activeGuild(message.guild.id);
                 let activateMessage = this.getLlamacoinActivateMessage(activateResult);
                 message.channel.send(activateMessage);
                 break;
             case '라마코인 비활성화' :
-                let inactivateResult = await this.dbManager.llamacoinInactiveGuild(message.guild.id);
-                let inactivateMessage = this.getLlamacoinActivateMessage(inactivateResult);
+                let inactivateResult = await this.dbManager.inactiveGuild(message.guild.id);
+                let inactivateMessage = this.getLlamacoinInactivateMessage(inactivateResult);
                 message.channel.send(inactivateMessage);
                 break;
             case '라마코인 지갑생성' :
+                let createWalletResult = await this.dbManager.createWallet(message.guild.id, message.member.user.id)
+                let createWalletMessage = this.getLlamacoinCreateWalletMessage(createWalletResult);
+                message.channel.send(createWalletMessage);
+                break;
+            case '라마코인 잔액확인' :
+                let getWalletResult = await this.dbManager.getWallet(message.guild.id, message.member.user.id);
+                let getWalletMessage = this.getLlamacoinGetWalletMessage(getWalletResult);
+                message.channel.send(message.member.user.username + getWalletMessage);
                 break;
         }
     }
@@ -121,9 +129,44 @@ module.exports = class LlamaBot{
     getLlamacoinActivateMessage(result){
         switch (result) {
             case 'NO_REGIST' :
-                return `라마코인 시스템에 서버가 등록해 주십시오(명령어 : 라마코인 등록).`
+                return `라마코인 시스템에 서버를 등록해 주십시오(명령어 : 라마코인 등록).`
+            case 'SUCCESS' :
+                return `라마코인 시스템이 활성화 되었습니다.`
+        }
+    }
+
+    getLlamacoinInactivateMessage(result){
+        switch (result) {
+            case 'NO_REGIST' :
+                return `라마코인 시스템에 서버를 등록해 주십시오(명령어 : 라마코인 등록).`
             case 'SUCCESS' :
                 return `라마코인 시스템이 비활성화 되었습니다.`
+        }
+    }
+
+    getLlamacoinCreateWalletMessage(result){
+        switch (result) {
+            case 'INACTIVE' :
+                return `시스템이 비활성화 상태입니다. '라마코인 활성화'를 입력해  시스템을 활성화 시켜야 합니다.`
+            case 'NO_REGIST' :
+                return `라마코인 시스템에 서버를 등록해 주십시오(명령어 : 라마코인 등록).`
+            case 'SUCCESS' :
+                return `지갑이 생성되었습니다. 지갑생성 기념 1000코인을 드립니다.`
+            case 'ALREADY_EXIST' :
+                return `이미 지갑을 가지고 있습니다.`
+        }
+    }
+
+    getLlamacoinGetWalletMessage(result){
+        switch (result) {
+            case 'INACTIVE' :
+                return `시스템이 비활성화 상태입니다. '라마코인 활성화'를 입력해  시스템을 활성화 시켜야 합니다.`
+            case 'NO_REGIST' :
+                return `라마코인 시스템에 서버를 등록해 주십시오(명령어 : 라마코인 등록).`
+            case 'WALLET_NOT_FOUND' :
+                return `지갑이 생성되었습니다. 지갑생성 기념 1000코인을 드립니다.`
+            default :
+                return `님의 총 코인은 ${result}입니다.`
         }
     }
 }
