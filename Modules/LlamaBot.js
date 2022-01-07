@@ -43,8 +43,8 @@ module.exports = class LlamaBot{
           
         client.on('messageCreate', message => {
             this.mining(message);
-            this.processingCommands(message);
-            this.processingLlamacoinCommands(message);
+            // this.processingCommands(message);
+            // this.processingLlamacoinCommands(message);
         });
           
         client.login(process.env.TOKEN);
@@ -172,7 +172,7 @@ module.exports = class LlamaBot{
     }
 
     async mining(message){
-        let nonce = message.nonce % 100;
+        let nonce = Math.floor(Math.random() * 100);
         let miningResult = await this.dbManager.mining(message.guild.id, message.member.user.id, nonce);
         if (miningResult == 'MINING_SUCCESS') {
             message.channel.send("채굴에 성공하였습니다! 500코인이 지급된니다.");
