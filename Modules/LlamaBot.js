@@ -221,7 +221,7 @@ module.exports = class LlamaBot{
             message.channel.send('잭팟! 20000포인트 지급!');
             return 19800;
         }else if(roulletNumbers[0]==roulletNumbers[1] || roulletNumbers[0]==roulletNumbers[2] || roulletNumbers[2]==roulletNumbers[1]) {
-            message.channel.send('당첨! 600포인트 지급!');
+            message.channel.send('당첨! 400포인트 지급!');
             return 400;
         }
         else{
