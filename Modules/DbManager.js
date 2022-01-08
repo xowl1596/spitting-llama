@@ -155,7 +155,7 @@ module.exports = class DbManager{
     }
 
     async proccessRoulletSuccess(guildId, userId){
-        let updateCoinQuery = `UPDATE wallets SET coin = coin+800 WHERE guild_id=${guildId} AND user_id=${userId}`
+        let updateCoinQuery = `UPDATE wallets SET coin = coin+19800 WHERE guild_id=${guildId} AND user_id=${userId}`
         this.client.query(updateCoinQuery);
     }
 
