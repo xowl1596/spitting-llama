@@ -214,7 +214,7 @@ module.exports = class LlamaBot{
         let msg = '';
         for(let i = 0; i < 3; i++){
             roulletNumbers.push(Math.floor(Math.random() * 10));
-            msg += `${i+1}번째 숫자! : ${roulletNumbers[i]}`
+            msg += (i+1) + '번째 숫자! : ' + roulletNumbers[i] + '\n'
         }
         message.channel.send(msg);
 
