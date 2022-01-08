@@ -135,6 +135,7 @@ module.exports = class LlamaBot{
                         message.channel.send('코인이 모자라잖아! 퉷!');
                     }
                     else {
+                        let roulletResultCoin = this.roullet(message);
                         this.dbManager.proccessRoullet(message.guild.id, message.member.user.id, roulletResultCoin)
                     }
                 }else {
@@ -220,7 +221,7 @@ module.exports = class LlamaBot{
             message.channel.send('잭팟! 20000포인트 지급!');
             return 19800;
         }else if(roulletNumbers[0]==roulletNumbers[1] || roulletNumbers[0]==roulletNumbers[2] || roulletNumbers[2]==roulletNumbers[1]) {
-            message.channel.send('ekdcja! 2000포인트 지급!');
+            message.channel.send('당첨! 2000포인트 지급!');
             return 1800;
         }
         else{
