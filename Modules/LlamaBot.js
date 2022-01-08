@@ -33,7 +33,7 @@ module.exports = class LlamaBot{
             '라마코인 지갑생성 : 해당서버에 자신의 지갑을 생성합니다. 지갑을 생성해야 라마코인 시스템이 사용 가능합니다.\n'+
             '라마코인 잔액확인 : 자신이 얼마나 코인을 가지고 있는지 확인합니다.\n'+
             '라마코인 랭크 : 우리 서버 빌게이츠는 누구?\n'+
-            '라마코인 룰렛 : 200포인트로 도박을 합니다. 잭팟 100배, 당첨되면 1.5배입니다. 가즈아~~!\n';
+            '라마코인 룰렛 : 200포인트로 도박을 합니다. 잭팟은 12000코인, 당첨되면 350코인입니다. 가즈아~~!\n';
         this.startBot();
     }
     
@@ -217,11 +217,11 @@ module.exports = class LlamaBot{
         }
 
         if(roulletNumbers[0]==roulletNumbers[1] && roulletNumbers[0]==roulletNumbers[2]){
-            message.channel.send('잭팟! 20000포인트 지급!');
-            return 19800;
+            message.channel.send('잭팟! 12000포인트 지급!');
+            return 11800;
         }else if(roulletNumbers[0]==roulletNumbers[1] || roulletNumbers[0]==roulletNumbers[2] || roulletNumbers[2]==roulletNumbers[1]) {
-            message.channel.send('당첨! 300포인트 지급!');
-            return 100;
+            message.channel.send('당첨! 250포인트 지급!');
+            return 50;
         }
         else{
             message.channel.send('꽝이지롱 퉤엣!');
