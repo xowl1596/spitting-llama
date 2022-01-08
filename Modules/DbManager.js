@@ -159,6 +159,12 @@ module.exports = class DbManager{
         this.client.query(updateCoinQuery);
     }
 
+    async getCoinRank(guildId) {
+        let coinRankQuery = `SELECT * FROM wallets WHERE guild_id=${guildId} ORDER BY coin DESC LIMIT 10`
+        let coinRankResult = await this.client.query(coinRankQuery);
+        return coinRankResult.rows;
+    }
+
     async checkGuild(guildId){
         //서버가 등록되어 있거나 활성화되어있는 지 확인
         let searchGuildQuery = `SELECT id, is_active FROM guilds WHERE id = ${guildId}`;

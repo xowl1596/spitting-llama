@@ -32,6 +32,7 @@ module.exports = class LlamaBot{
             '라마코인 활성화 / 비활성화 : 라마코인 시스템을 활성화/비활성화 합니다.\n'+
             '라마코인 지갑생성 : 해당서버에 자신의 지갑을 생성합니다. 지갑을 생성해야 라마코인 시스템이 사용 가능합니다.\n'+
             '라마코인 잔액확인 : 자신이 얼마나 코인을 가지고 있는지 확인합니다.\n'+
+            '라마코인 랭크 : 우리 서버 빌게이츠는 누구?\n'+
             '라마코인 룰렛 : 200포인트로 도박을 합니다. 성공하면 5배입니다. 가즈아~~!\n'+
             '라마코인 500만개 모으면 빠루님이 제로투 춤 ㅇㅇ';
         this.startBot();
@@ -113,6 +114,16 @@ module.exports = class LlamaBot{
                 let getWalletResult = await this.dbManager.getWallet(message.guild.id, message.member.user.id);
                 let getWalletMessage = this.getLlamacoinGetWalletMessage(getWalletResult);
                 message.channel.send(message.member.user.username + getWalletMessage);
+                break;
+            case '라마코인 랭크' : 
+                let rankData = await this.dbManager.getCoinRank(message.guild.id);
+                let msg = message.guild.name + ' 서버 부자 TOP 10\n'
+                
+                rankData.map((data, index)=>{
+                    msg += (index+1) + '위 : ' + data.user_name + ' - ' + data.coin+ '코인\n';
+                });
+
+                message.channel.send(msg);
                 break;
             case '라마코인 룰렛' :
                 let checkGuild = await this.dbManager.checkGuild(message.guild.id);
