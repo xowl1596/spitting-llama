@@ -34,7 +34,7 @@ module.exports = class LlamaBot{
             '라마코인 잔액확인 : 자신이 얼마나 코인을 가지고 있는지 확인합니다.\n'+
             '라마코인 랭크 : 우리 서버 빌게이츠는 누구?\n'+
             '라마코인 룰렛 : 200포인트로 도박을 합니다. 성공하면 100배입니다. 가즈아~~!\n'+
-            '라마코인 500만개 모으면 제작자가 제로투 춤 ㅇㅇ';
+            '라마코인 500만개 모으면 효찡찡님이 제로투 춤 ㅇㅇ';
         this.startBot();
     }
     
@@ -221,8 +221,8 @@ module.exports = class LlamaBot{
             message.channel.send('잭팟! 20000포인트 지급!');
             return 19800;
         }else if(roulletNumbers[0]==roulletNumbers[1] || roulletNumbers[0]==roulletNumbers[2] || roulletNumbers[2]==roulletNumbers[1]) {
-            message.channel.send('당첨! 2000포인트 지급!');
-            return 1800;
+            message.channel.send('당첨! 600포인트 지급!');
+            return 400;
         }
         else{
             message.channel.send('꽝이지롱 퉤엣!');
