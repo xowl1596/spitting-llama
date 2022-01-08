@@ -34,7 +34,7 @@ module.exports = class LlamaBot{
             '라마코인 잔액확인 : 자신이 얼마나 코인을 가지고 있는지 확인합니다.\n'+
             '라마코인 랭크 : 우리 서버 빌게이츠는 누구?\n'+
             '라마코인 룰렛 : 200포인트로 도박을 합니다. 성공하면 100배입니다. 가즈아~~!\n'+
-            '라마코인 500만개 모으면 빠루님이 제로투 춤 ㅇㅇ';
+            '라마코인 500만개 모으면 제작자가 제로투 춤 ㅇㅇ';
         this.startBot();
     }
     
@@ -135,13 +135,7 @@ module.exports = class LlamaBot{
                         message.channel.send('코인이 모자라잖아! 퉷!');
                     }
                     else {
-                        let roulletResult = this.roullet(message);
-                        if(roulletResult){
-                            this.dbManager.proccessRoulletSuccess(message.guild.id, message.member.user.id)
-                        }
-                        else{
-                            this.dbManager.proccessRoulletFail(message.guild.id, message.member.user.id)
-                        }
+                        this.dbManager.proccessRoullet(message.guild.id, message.member.user.id, roulletResultCoin)
                     }
                 }else {
                     message.channel.send('서버가 등록되지 않거나 시스템이 활성화되어있지 않습니다.');
@@ -223,12 +217,15 @@ module.exports = class LlamaBot{
         }
 
         if(roulletNumbers[0]==roulletNumbers[1] && roulletNumbers[0]==roulletNumbers[2]){
-            message.channel.send('축하합니다! 20000포인트 지급!');
-            return true;
+            message.channel.send('잭팟! 20000포인트 지급!');
+            return 19800;
+        }else if(roulletNumbers[0]==roulletNumbers[1] || roulletNumbers[0]==roulletNumbers[2] || roulletNumbers[2]==roulletNumbers[1]) {
+            message.channel.send('ekdcja! 2000포인트 지급!');
+            return 1800;
         }
         else{
             message.channel.send('꽝이지롱 퉤엣!');
-            return false;
+            return -200;
         }
     }
 }

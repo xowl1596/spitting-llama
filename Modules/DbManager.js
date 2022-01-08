@@ -149,13 +149,16 @@ module.exports = class DbManager{
         }
     }
 
-    async proccessRoulletFail(guildId, userId){
-        let updateCoinQuery = `UPDATE wallets SET coin = coin-200 WHERE guild_id=${guildId} AND user_id=${userId}`
-        this.client.query(updateCoinQuery);
-    }
-
-    async proccessRoulletSuccess(guildId, userId){
-        let updateCoinQuery = `UPDATE wallets SET coin = coin+19800 WHERE guild_id=${guildId} AND user_id=${userId}`
+    async proccessRoullet(guildId, userId, coin){
+        let val = ''
+        if(coin > 0){
+            val = `+${coin}`; 
+        }
+        else{
+            val = `-${coin}`
+        }
+        
+        let updateCoinQuery = `UPDATE wallets SET coin = coin${val} WHERE guild_id=${guildId} AND user_id=${userId}`
         this.client.query(updateCoinQuery);
     }
 
