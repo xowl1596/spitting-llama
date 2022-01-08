@@ -211,10 +211,12 @@ module.exports = class LlamaBot{
     roullet(message){
         let roulletNumbers = []
         message.channel.send('룰렛을 돌립니다!');
+        let msg = '';
         for(let i = 0; i < 3; i++){
             roulletNumbers.push(Math.floor(Math.random() * 10));
-            message.channel.send(`${i+1}번째 숫자! : ${roulletNumbers[i]}`);
+            msg += `${i+1}번째 숫자! : ${roulletNumbers[i]}`
         }
+        message.channel.send(msg);
 
         if(roulletNumbers[0]==roulletNumbers[1] && roulletNumbers[0]==roulletNumbers[2]){
             message.channel.send('잭팟! 12000포인트 지급!');
