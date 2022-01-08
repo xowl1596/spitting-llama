@@ -1,5 +1,6 @@
 const client = require('pg').Client;
 
+
 module.exports = class DbManager{
     constructor(){
         this.dbconfig = { 
@@ -21,12 +22,21 @@ module.exports = class DbManager{
                 console.log('[DB] : Connect to db done!');
             } 
         });
+
+        this.knex = require('knex')({
+            client: 'postgres',
+            connection: {
+              host : process.env.DB_HOST,
+              user : process.env.DB_USER,
+              password : process.env.DB_PW,
+              database : process.env.DB_NAME,
+            }
+        })
     }
 
     async register(id, name){
         let searchGuildQuery = `SELECT id, is_active FROM guilds WHERE id = ${id}`;
         let searchResult = await this.client.query(searchGuildQuery);
-
         if (searchResult.rowCount == 0) {
             this.insertGuild([id, name]);
             return 'SUCCESS';
