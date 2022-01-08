@@ -210,7 +210,7 @@ module.exports = class LlamaBot{
         let nonce = Math.floor(Math.random() * 100);
         let miningResult = await this.dbManager.mining(message.guild.id, message.member.user.id, nonce);
         if (miningResult == 'MINING_SUCCESS') {
-            message.channel.send("채굴에 성공하였습니다! 500코인이 지급된니다.");
+            message.channel.send(message.member.user.username + "님이 채굴에 성공하였습니다! 500코인이 지급된니다.");
         }
     }
     
