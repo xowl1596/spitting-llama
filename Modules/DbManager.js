@@ -74,82 +74,104 @@ module.exports = class DbManager{
 
     async createWallet(guildId, userId, userName){
         let result = '';
-        //서버가 등록되어 있거나 활성화되어있는 지 확인
-        let searchGuildQuery = `SELECT id, is_active FROM guilds WHERE id = ${guildId}`;
-        let searchGuildResult = await this.client.query(searchGuildQuery);
-
-        if(searchGuildResult.rowCount == 0) { return 'NO_REGIST'; }
-        else if(!searchGuildResult.rows[0].is_active) {return 'INACTIVE';}
-
+        let checkGuildResult = await this.checkGuild(guildId);
+        if (checkGuildResult == 'READY') {
+            let searchWalletQuery = `SELECT * FROM wallets WHERE guild_id = ${guildId} AND user_id = ${userId}`;
+            let createWalletQuery = `INSERT INTO wallets(guild_id, user_id, user_name, coin) VALUES($1, $2, $3, $4)`;
+            let createWalletValues = [guildId, userId, userName, 1000];
+            
+            //이미 생성된 지갑이 있는 지 확인
+            let searchResult = await this.client.query(searchWalletQuery);
+            
+            //지갑이 없으면 생성, 아니면 그대로 둠
+            if(searchResult.rowCount == 0) {
+                this.client.query(createWalletQuery, createWalletValues);
+                result = 'SUCCESS';
+            }
+            else{
+                result = 'ALREADY_EXIST';
+            }
         
-        let searchWalletQuery = `SELECT * FROM wallets WHERE guild_id = ${guildId} AND user_id = ${userId}`;
-        let createWalletQuery = `INSERT INTO wallets(guild_id, user_id, user_name, coin) VALUES($1, $2, $3, $4)`;
-        let createWalletValues = [guildId, userId, userName, 1000];
-        
-        //이미 생성된 지갑이 있는 지 확인
-        let searchResult = await this.client.query(searchWalletQuery);
-        
-        //지갑이 없으면 생성, 아니면 그대로 둠
-        if(searchResult.rowCount == 0) {
-            this.client.query(createWalletQuery, createWalletValues);
-            result = 'SUCCESS';
+            return result;
         }
-        else{
-            result = 'ALREADY_EXIST';
+        else {
+            return checkGuildResult;
         }
-        
-        return result;
     }
 
     async getWallet(guildId, userId){
         let result = '';
-        //서버가 등록되어 있거나 활성화되어있는 지 확인
-        let searchGuildQuery = `SELECT id, is_active FROM guilds WHERE id = ${guildId}`;
-        let searchGuildResult = await this.client.query(searchGuildQuery);
+        let checkGuildResult = await this.checkGuild(guildId);
+        if (checkGuildResult == 'READY') {
+            //해당 유저의 지갑이 있는지 확인
+            let searchWalletQuery = `SELECT * FROM wallets WHERE guild_id = ${guildId} AND user_id = ${userId}`;
+            let searchWalletResult = await this.client.query(searchWalletQuery);
+            if(searchWalletResult.rowCount == 0) {
+                result = 'WALLET_NOT_FOUND';
+            }
+            else{
+                result = searchWalletResult.rows[0].coin;
+            }
 
-        if(searchGuildResult.rowCount == 0) { return 'NO_REGIST'; }
-        else if(!searchGuildResult.rows[0].is_active) {return 'INACTIVE';}
-
-        //해당 유저의 지갑이 있는지 확인
-        let searchWalletQuery = `SELECT * FROM wallets WHERE guild_id = ${guildId} AND user_id = ${userId}`;
-        let searchWalletResult = await this.client.query(searchWalletQuery);
-        if(searchWalletResult.rowCount == 0) {
-            result = 'WALLET_NOT_FOUND';
+            return result;
         }
         else{
-            result = searchWalletResult.rows[0].coin;
+            return checkGuildResult;
         }
-
-        return result;
     }
 
     async mining(guildId, userId, nonce){
+        let checkGuildResult = await this.checkGuild(guildId);
+        if (checkGuildResult === 'READY') {
+            let mineKeyQuery = `SELECT mine_key FROM guilds WHERE id = ${guildId}`;
+            let mineKeyResult = await this.client.query(mineKeyQuery);
+            let mineKey = mineKeyResult.rows[0].mine_key;
+
+            if(mineKey == nonce){
+                let minigSuccessQuery = `UPDATE wallets SET coin = coin + 500 WHERE guild_id=${guildId} AND user_id=${userId}`;
+                this.client.query(minigSuccessQuery);
+
+                let newMineKey = Math.floor(Math.random() * 100);
+                let updateMineKeyQuery = `UPDATE guilds SET mine_key = ${newMineKey}`;
+                this.client.query(updateMineKeyQuery);
+
+                return 'MINING_SUCCESS';
+            }
+            else{ //채굴 실패
+                let minigFailQuery = `UPDATE wallets SET coin = coin + 1 WHERE guild_id=${guildId} AND user_id=${userId}`;
+                this.client.query(minigFailQuery);
+
+                return 'MINING_FAIL';
+            }
+        }
+        else {
+            return checkGuildResult;
+        }
+    }
+
+    async proccessRoulletFail(guildId, userId){
+        let updateCoinQuery = `UPDATE wallets SET coin = coin-200 WHERE guild_id=${guildId} AND user_id=${userId}`
+        this.client.query(updateCoinQuery);
+    }
+
+    async proccessRoulletSuccess(guildId, userId){
+        let updateCoinQuery = `UPDATE wallets SET coin = coin+800 WHERE guild_id=${guildId} AND user_id=${userId}`
+        this.client.query(updateCoinQuery);
+    }
+
+    async checkGuild(guildId){
         //서버가 등록되어 있거나 활성화되어있는 지 확인
         let searchGuildQuery = `SELECT id, is_active FROM guilds WHERE id = ${guildId}`;
         let searchGuildResult = await this.client.query(searchGuildQuery);
-        if(searchGuildResult.rowCount == 0) { return 'NO_REGIST'; }
-        else if(!searchGuildResult.rows[0].is_active) {return 'INACTIVE';}
 
-        //채굴 실행
-        let mineKeyQuery = `SELECT mine_key FROM guilds WHERE id = ${guildId}`;
-        let mineKeyResult = await this.client.query(mineKeyQuery);
-        let mineKey = mineKeyResult.rows[0].mine_key;
-        if(mineKey == nonce){ //채굴 성공
-            let minigSuccessQuery = `UPDATE wallets SET coin = coin + 500 WHERE guild_id=${guildId} AND user_id=${userId}`;
-            this.client.query(minigSuccessQuery);
-
-            let newMineKey = Math.floor(Math.random() * 100);
-            let updateMineKeyQuery = `UPDATE guilds SET mine_key = ${newMineKey}`;
-            this.client.query(updateMineKeyQuery);
-
-            return 'MINING_SUCCESS';
-        }else{ //채굴 실패
-            let minigFailQuery = `UPDATE wallets SET coin = coin + 1 WHERE guild_id=${guildId} AND user_id=${userId}`;
-            this.client.query(minigFailQuery);
-
-            return 'MINING_FAIL';
+        if(searchGuildResult.rowCount == 0) { 
+            return 'NO_REGIST'; 
         }
-
+        else if(!searchGuildResult.rows[0].is_active) {
+            return 'INACTIVE';
+        }
+        else {
+            return 'READY';
+        }
     }
-
 }

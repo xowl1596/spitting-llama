@@ -32,6 +32,7 @@ module.exports = class LlamaBot{
             '라마코인 활성화 / 비활성화 : 라마코인 시스템을 활성화/비활성화 합니다.\n'+
             '라마코인 지갑생성 : 해당서버에 자신의 지갑을 생성합니다. 지갑을 생성해야 라마코인 시스템이 사용 가능합니다.\n'+
             '라마코인 잔액확인 : 자신이 얼마나 코인을 가지고 있는지 확인합니다.\n'+
+            '라마코인 룰렛 : 200포인트로 도박을 합니다. 성공하면 5배입니다. 가즈아~~!'
             '라마코인 500만개 모으면 제작자가 제로투 춤 ㅇㅇ';
         this.startBot();
     }
@@ -113,6 +114,29 @@ module.exports = class LlamaBot{
                 let getWalletMessage = this.getLlamacoinGetWalletMessage(getWalletResult);
                 message.channel.send(message.member.user.username + getWalletMessage);
                 break;
+            case '라마코인 룰렛' :
+                let checkGuild = await this.dbManager.checkGuild(message.guild.id);
+
+                if(checkGuild == 'READY'){
+                    let coin = await this.dbManager.getWallet(message.guild.id, message.member.user.id);
+                    
+                    if (coin < 200) {
+                        message.channel.send('코인이 모자라잖아! 퉷!');
+                    }
+                    else {
+                        let roulletResult = this.roullet(message);
+                        if(roulletResult){
+                            this.dbManager.proccessRoulletSuccess(message.guild.id, message.member.user.id)
+                        }
+                        else{
+                            this.dbManager.proccessRoulletFail(message.guild.id, message.member.user.id)
+                        }
+                    }
+                }else {
+                    message.channel.send('서버가 등록되지 않거나 시스템이 활성화되어있지 않습니다.');
+                }
+                
+                break;
         }
     }
 
@@ -176,6 +200,24 @@ module.exports = class LlamaBot{
         let miningResult = await this.dbManager.mining(message.guild.id, message.member.user.id, nonce);
         if (miningResult == 'MINING_SUCCESS') {
             message.channel.send("채굴에 성공하였습니다! 500코인이 지급된니다.");
+        }
+    }
+    
+    roullet(message){
+        let roulletNumbers = []
+        message.channel.send('룰렛을 돌립니다!');
+        for(let i = 0; i < 3; i++){
+            roulletNumbers.push(Math.floor(Math.random() * 10));
+            message.channel.send(`${i+1}번째 숫자! : ${roulletNumbers[i]}`);
+        }
+
+        if(roulletNumbers[0]==roulletNumbers[1] && roulletNumbers[0]==roulletNumbers[2]){
+            message.channel.send('축하합니다! 200포인트 지급!');
+            return true;
+        }
+        else{
+            message.channel.send('꽝이지롱 퉤엣!');
+            return false;
         }
     }
 }
