@@ -188,7 +188,7 @@ module.exports = class DbManager{
 
     async checkGuild(guildId){
         let guild = await this.getGuildById(guildId);
-        console.log(guild);
+
         if(typeof guild == 'undefined') { 
             return 'NO_REGIST'; 
         }
