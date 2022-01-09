@@ -2,7 +2,7 @@ const client = require('pg').Client;
 require("dotenv").config();
 
 module.exports = class DbManager{
-    //raw쿼리로 처리되는 함수들에 사용되는 코드 - knex로 모두 바뀌면 없앨 것
+    //raw쿼리로 처리되는 함수들에 사용되는 설정 - knex로 모두 바뀌면 없앨 것
     static dbconfig = { 
         host: process.env.DB_HOST, 
         user: process.env.DB_USER, 
@@ -13,7 +13,6 @@ module.exports = class DbManager{
             rejectUnauthorized: false
         }
     };
-
 
     static knex = require('knex')({
         client: 'pg', 
@@ -46,9 +45,9 @@ module.exports = class DbManager{
     async register(id, name){
         let guild = await this.getGuildById(id);
         let result = this.checkGuildAndRegister(guild);
-        console.log(result);
+
         if(result == 'SUCCESS') {
-            await this.knex('guilds').insert({'id':id, 'name':name});
+            await DbManager.knex('guilds').insert({'id':id, 'name':name});
         }
 
         return result;
@@ -73,29 +72,25 @@ module.exports = class DbManager{
     }
 
     async activeGuild(id){
-        let searchGuildQuery = `SELECT id, is_active FROM guilds WHERE id = ${id}`;
-        let activeGuildQuery = `UPDATE guilds SET is_active = true WHERE id = ${id}`;
+        let guild = await this.getGuildById(id);
         
-        let searchResult = await this.client.query(searchGuildQuery);
-        if(searchResult.rowCount == 0) {
+        if(typeof guild == 'undefined') {
             return 'NO_REGIST';
         }
         else{
-            this.client.query(activeGuildQuery);
+            DbManager.knex('guilds').update({is_active:true}).where('id', id)
             return 'SUCCESS';
         }
     }
 
     async inactiveGuild(id){
-        let searchGuildQuery = `SELECT id, is_active FROM guilds WHERE id = ${id}`;
-        let activeGuildQuery = `UPDATE guilds SET is_active = false WHERE id = ${id}`;
+        let guild = await this.getGuildById(id);
         
-        let searchResult = await this.client.query(searchGuildQuery);
-        if(searchResult.rowCount == 0) {
+        if(typeof guild == 'undefined') {
             return 'NO_REGIST';
         }
         else{
-            this.client.query(activeGuildQuery);
+            DbManager.knex('guilds').update({is_active:false}).where('id', id)
             return 'SUCCESS';
         }
     }
