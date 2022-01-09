@@ -9,7 +9,9 @@ module.exports = class DbManager{
             password: process.env.DB_PW, 
             database: process.env.DB_NAME, 
             port: process.env.DB_PORT, 
-            ssl: { rejectUnauthorized: false } 
+            ssl: {
+                rejectUnauthorized: false
+            }
         };
 
         this.client = new client(this.dbconfig);
@@ -24,24 +26,30 @@ module.exports = class DbManager{
         });
 
         this.knex = require('knex')({
-            client: 'postgres',
+            client: 'pg', 
             connection: {
-              host : process.env.DB_HOST,
-              user : process.env.DB_USER,
-              password : process.env.DB_PW,
-              database : process.env.DB_NAME,
+                host: process.env.DB_HOST, 
+                user: process.env.DB_USER, 
+                password: process.env.DB_PW, 
+                database: process.env.DB_NAME, 
+                port: process.env.DB_PORT,
+                connectionString: process.env.DB_URL,
+                ssl: {
+                    rejectUnauthorized: false
+                }
             }
         })
     }
 
     async register(id, name){
-        let searchGuildQuery = `SELECT id, is_active FROM guilds WHERE id = ${id}`;
-        let searchResult = await this.client.query(searchGuildQuery);
-        if (searchResult.rowCount == 0) {
-            this.insertGuild([id, name]);
+        let guild = await this.knex.select('id', 'is_active').from('guilds').where('id', id).first();
+
+        if (typeof guild == 'undefined') {
+            await this.knex('guilds').insert({'id':id, 'name':name});
             return 'SUCCESS';
         }
-        else if (!searchResult.rows[0].is_active){
+        
+        if (guild.is_active == false){
             return 'INACTIVE';
         }
         else {
