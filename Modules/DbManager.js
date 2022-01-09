@@ -78,7 +78,7 @@ module.exports = class DbManager{
             return 'NO_REGIST';
         }
         else{
-            DbManager.knex('guilds').update({is_active:true}).where('id', id)
+            await DbManager.knex('guilds').update({is_active:true}).where('id', id)
             return 'SUCCESS';
         }
     }
@@ -90,7 +90,7 @@ module.exports = class DbManager{
             return 'NO_REGIST';
         }
         else{
-            DbManager.knex('guilds').update({is_active:false}).where('id', id)
+            await DbManager.knex('guilds').update({is_active:false}).where('id', id)
             return 'SUCCESS';
         }
     }
@@ -99,8 +99,11 @@ module.exports = class DbManager{
         let checkGuildResult = await this.checkGuild(guildId);
 
         if (checkGuildResult == 'READY') {
-            let wallet =  await DbManager.knex.select().from('wallets').where({guild_id : guildId, user_id : userId});
-            
+            let wallet =  await DbManager.knex.select()
+                .from('wallets')
+                .where({guild_id : guildId, user_id : userId})
+                .first();
+
             if(typeof wallet == 'undefined') {
                 await DbManager.knex('wallets').insert({guild_id:guildId, user_id:userId, user_name:userName, coin:1000});
                 return 'SUCCESS';
@@ -184,7 +187,8 @@ module.exports = class DbManager{
     }
 
     async checkGuild(guildId){
-        let guild = DbManager.getGuildById(guildId);
+        let guild = await this.getGuildById(guildId);
+        console.log(guild);
         if(typeof guild == 'undefined') { 
             return 'NO_REGIST'; 
         }
