@@ -22,7 +22,7 @@ module.exports = class LlamaBot{
             '침뱉기 : 캬악 칵 카악 캭 (!붙이면 이미지가 나옵니다.)\n'+
             '핥기 : 낼름 냘름 핥 핥짝 핥쨕\n'+
             '경고 : 건들지마!\n'+
-            '매력어필 : 난멋져 난예뻐\n'+
+            '고백으로 혼내주기 : 난멋져 난예뻐\n'+
             '질문 : 마법의 라마고동님 (질문)\n'+
             '라마코인 도움말 : 라마코인 도움말'+
             '소스코드 : https://github.com/xowl1596/spitting-llama';  
@@ -60,9 +60,11 @@ module.exports = class LlamaBot{
                 message.channel.send('건들면 침뱉을거야!');
                 break;
             case '난멋져' :
+                message.channel.send("그대의 눈동자에 치얼쓰");
                 message.channel.send({ files: [{ attachment: './llama3.jpg' }] });
                 break;
             case '난예뻐' :
+                message.channel.send("그대의 눈동자에 치얼쓰");
                 message.channel.send({ files: [{ attachment: './llama4.jpg' }] });
                 break;
         }

@@ -1,20 +1,37 @@
 const client = require('pg').Client;
-
+require("dotenv").config();
 
 module.exports = class DbManager{
-    constructor(){
-        this.dbconfig = { 
+    //raw쿼리로 처리되는 함수들에 사용되는 코드 - knex로 모두 바뀌면 없앨 것
+    static dbconfig = { 
+        host: process.env.DB_HOST, 
+        user: process.env.DB_USER, 
+        password: process.env.DB_PW, 
+        database: process.env.DB_NAME, 
+        port: process.env.DB_PORT, 
+        ssl: {
+            rejectUnauthorized: false
+        }
+    };
+
+
+    static knex = require('knex')({
+        client: 'pg', 
+        connection: {
             host: process.env.DB_HOST, 
             user: process.env.DB_USER, 
             password: process.env.DB_PW, 
             database: process.env.DB_NAME, 
-            port: process.env.DB_PORT, 
+            port: process.env.DB_PORT,
+            connectionString: process.env.DB_URL,
             ssl: {
                 rejectUnauthorized: false
             }
-        };
+        }
+    })
 
-        this.client = new client(this.dbconfig);
+    constructor(){
+        this.client = new client(DbManager.dbconfig);
 
         this.client.connect(err => { 
             if (err) { 
@@ -24,42 +41,35 @@ module.exports = class DbManager{
                 console.log('[DB] : Connect to db done!');
             } 
         });
-
-        this.knex = require('knex')({
-            client: 'pg', 
-            connection: {
-                host: process.env.DB_HOST, 
-                user: process.env.DB_USER, 
-                password: process.env.DB_PW, 
-                database: process.env.DB_NAME, 
-                port: process.env.DB_PORT,
-                connectionString: process.env.DB_URL,
-                ssl: {
-                    rejectUnauthorized: false
-                }
-            }
-        })
     }
 
     async register(id, name){
-        let guild = await this.knex.select('id', 'is_active').from('guilds').where('id', id).first();
-
-        if (typeof guild == 'undefined') {
+        let guild = await this.getGuildById(id);
+        let result = this.checkGuildAndRegister(guild);
+        console.log(result);
+        if(result == 'SUCCESS') {
             await this.knex('guilds').insert({'id':id, 'name':name});
+        }
+
+        return result;
+    }
+
+    async getGuildById(id){
+        let guild = await DbManager.knex.select('id', 'is_active').from('guilds').where('id', id).first();
+        return guild;
+    }
+
+    checkGuildAndRegister(guild){
+        if (typeof guild == 'undefined') {
             return 'SUCCESS';
         }
-        
+
         if (guild.is_active == false){
             return 'INACTIVE';
         }
         else {
             return 'ALREADY_EXIST';
         }
-    }
-
-    insertGuild(values){
-        let insertGuildQuery = `INSERT INTO guilds(id, name, is_active) VALUES($1, $2,true)`;
-        this.client.query(insertGuildQuery, values);
     }
 
     async activeGuild(id){
