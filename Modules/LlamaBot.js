@@ -1,4 +1,4 @@
-const { Client, Intents } = require('discord.js');
+const { Client, Intents, CommandInteractionOptionResolver } = require('discord.js');
 const DbManager = require('./DbManager.js');
 const client = new Client({ intents: [
   Intents.FLAGS.GUILDS, 
@@ -33,7 +33,10 @@ module.exports = class LlamaBot{
             '라마코인 지갑생성 : 해당서버에 자신의 지갑을 생성합니다. 지갑을 생성해야 라마코인 시스템이 사용 가능합니다.\n'+
             '라마코인 잔액확인 : 자신이 얼마나 코인을 가지고 있는지 확인합니다.\n'+
             '라마코인 랭크 : 우리 서버 빌게이츠는 누구?\n'+
-            '라마코인 룰렛 : 200포인트로 도박을 합니다. 잭팟은 12000코인, 당첨되면 350코인입니다. 가즈아~~!\n';
+            '라마코인 룰렛 : 200포인트로 도박을 합니다. 잭팟은 12000코인, 당첨되면 350코인입니다. 가즈아~~!\n\n'+
+            '라마코인 주식 목록 : 이 서버에 있는 주식을 보여줍니다.\n'+
+            '라마코인 주식 구매/판매 <주식이름> <개수> : 주식을 구매/판매합니다.'
+
         this.startBot();
     }
     
@@ -144,6 +147,18 @@ module.exports = class LlamaBot{
                 }
                 
                 break;
+            case '라마코인 주식 목록' : 
+                let stockList = await this.dbManager.getStockList(message.guild.id);
+                let stockListMessage = this.createStockListMessage(stockList);
+                message.channel.send(stockListMessage);
+                break;
+        }
+
+        if(message.content.startsWith('라마코인 주식 구매')){
+            message.channel.send('준비중');
+        }
+        if(message.content.startsWith('라마코인 주식 판매')){
+            message.channel.send('준비중');
         }
     }
 
@@ -231,5 +246,14 @@ module.exports = class LlamaBot{
             message.channel.send('꽝이지롱 퉤엣!');
             return -200;
         }
+    }
+
+    createStockListMessage(stocks){
+        let msg = '주식 목록\n=========================\n';
+        for(let i=0; i<stocks.length; i++){
+            msg += stocks[i].stock_name + " - 주가 : " + stocks[i].price + "코인\n";
+        }
+
+        return msg;
     }
 }

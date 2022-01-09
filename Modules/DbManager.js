@@ -199,4 +199,10 @@ module.exports = class DbManager{
             return 'READY';
         }
     }
+
+    async getStockList(guildId){
+        let stocks = await DbManager.knex.select().from('stocks').where('guild_id', guildId);
+        return stocks;
+    }
+
 }
