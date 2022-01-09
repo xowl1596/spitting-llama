@@ -173,7 +173,7 @@ module.exports = class DbManager{
             val = `+${coin}`; 
         }
         else{
-            val = `-${coin}`
+            val = `${coin}`
         }
         
         let updateCoinQuery = `UPDATE wallets SET coin = coin${val} WHERE guild_id=${guildId} AND user_id=${userId}`
