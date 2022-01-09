@@ -96,26 +96,18 @@ module.exports = class DbManager{
     }
 
     async createWallet(guildId, userId, userName){
-        let result = '';
         let checkGuildResult = await this.checkGuild(guildId);
+
         if (checkGuildResult == 'READY') {
-            let searchWalletQuery = `SELECT * FROM wallets WHERE guild_id = ${guildId} AND user_id = ${userId}`;
-            let createWalletQuery = `INSERT INTO wallets(guild_id, user_id, user_name, coin) VALUES($1, $2, $3, $4)`;
-            let createWalletValues = [guildId, userId, userName, 1000];
+            let wallet =  await DbManager.knex.select().from('wallets').where({guild_id : guildId, user_id : userId});
             
-            //이미 생성된 지갑이 있는 지 확인
-            let searchResult = await this.client.query(searchWalletQuery);
-            
-            //지갑이 없으면 생성, 아니면 그대로 둠
-            if(searchResult.rowCount == 0) {
-                this.client.query(createWalletQuery, createWalletValues);
-                result = 'SUCCESS';
+            if(typeof wallet == 'undefined') {
+                await DbManager.knex('wallets').insert({guild_id:guildId, user_id:userId, user_name:userName, coin:1000});
+                return 'SUCCESS';
             }
             else{
-                result = 'ALREADY_EXIST';
+                return 'ALREADY_EXIST';
             }
-        
-            return result;
         }
         else {
             return checkGuildResult;
@@ -192,14 +184,11 @@ module.exports = class DbManager{
     }
 
     async checkGuild(guildId){
-        //서버가 등록되어 있거나 활성화되어있는 지 확인
-        let searchGuildQuery = `SELECT id, is_active FROM guilds WHERE id = ${guildId}`;
-        let searchGuildResult = await this.client.query(searchGuildQuery);
-
-        if(searchGuildResult.rowCount == 0) { 
+        let guild = DbManager.getGuildById(guildId);
+        if(typeof guild == 'undefined') { 
             return 'NO_REGIST'; 
         }
-        else if(!searchGuildResult.rows[0].is_active) {
+        else if(!guild.is_active) {
             return 'INACTIVE';
         }
         else {
