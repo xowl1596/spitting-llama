@@ -295,7 +295,7 @@ module.exports = class DbManager{
         let stockList = await DbManager.knex.select().from('stocks');
 
         for(let i=0; i < stockList.length; i++){
-            let price = Math.floor(Math.random() * 101); 
+            let price = Math.floor(Math.random() * 301); 
             let chk = Math.floor(Math.random() * 100);
             if(chk >= 50){
                 price *= -1
