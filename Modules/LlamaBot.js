@@ -193,19 +193,19 @@ module.exports = class LlamaBot{
             }
         }
 
-        if(message.content.startsWith('라마코인 주식 확인')){
-            let stockListParam = {
-                guildId : message.guild.id,
-                userId : message.member.user.id
-            }
+        // if(message.content.startsWith('라마코인 주식 확인')){
+        //     let stockListParam = {
+        //         guildId : message.guild.id,
+        //         userId : message.member.user.id
+        //     }
 
-            let stockList = await this.dbManager.getStockList(stockListParam);
-            let msg = `${message.member.user.username}님의 주식=======================` + '\n';
-            for(let i=0; i < stockList.length; i++){
-                msg += `${stockList[i].stock_name} : ${stockList[i].amount}` + '\n';
-            }
-            message.channel.send(msg);
-        }
+        //     let stockList = await this.dbManager.getStockList(stockListParam);
+        //     let msg = `${message.member.user.username}님의 주식=======================` + '\n';
+        //     for(let i=0; i < stockList.length; i++){
+        //         msg += `${stockList[i].stock_name} : ${stockList[i].amount}` + '\n';
+        //     }
+        //     message.channel.send(msg);
+        // }
     }
 
     getLlamacoinRegisterMessage(result){
