@@ -209,11 +209,16 @@ module.exports = class DbManager{
         let checkGuildResult = await this.checkGuild(param.guildId);
         
         if(checkGuildResult == 'READY'){
-            //주식구매
             //해당 주식이 있는지 확인
             let stock = await DbManager.knex.select().from('stocks').where({guild_id: param.guildId, stock_name: param.stockName}).first();
-            console.log(stock);
+
+            if(typeof stock == 'undefined'){
+                return 'STOCK_NOT_FOUND';
+            }
+            
             //유저가 지갑이 있는지 확인
+            let wallet = await DbManager.knex.select().from('wallets').where({guild_id: param.guildId, user_id: param.userId}).first();
+            console.log(wallet);
             //유저가 돈이 충분한지 확인
             
         }
