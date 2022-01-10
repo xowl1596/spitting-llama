@@ -1,7 +1,11 @@
 const fs = require('fs');
 const http = require('http');
 const Llamabot = require('./Modules/LlamaBot.js');
+let schedule = require('node-schedule');
+const DbManager = require('./Modules/DbManager.js');
 require("dotenv").config();
+
+var updateStockPrice = schedule.scheduleJob('1 * * * *', DbManager.updateStockPrice());
 
 let llama = new Llamabot();
 

@@ -291,7 +291,7 @@ module.exports = class DbManager{
         return stockList; 
     }
 
-    async updateStockPrice(){
+    static async updateStockPrice(){
         let stockList = await DbManager.knex.select().from('stocks');
 
         for(let i=0; i < stockList.length; i++){
