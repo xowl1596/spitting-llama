@@ -162,7 +162,7 @@ module.exports = class LlamaBot{
             }else {
                 let stockBuyParam = {
                     guildId : message.guild.id,
-                    userId : message.member.user.userId,
+                    userId : message.member.user.id,
                     stockName : messageSplit[3],
                     count : messageSplit[4]
                 }
