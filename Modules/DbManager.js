@@ -229,11 +229,54 @@ module.exports = class DbManager{
             //구매 진행
             //해당 유저가 이미 구매한 주식인지 확인
             let userStock = await DbManager.knex.select().from('user_stocks').where({guild_id:param.guildId, user_id: param.userId, stock_name: param.stockName}).first();
-            console.log(userStock);
+
             if(typeof userStock == 'undefined') { //구매한 주식이 아니면 생성
                 await DbManager.knex('user_stocks').insert({guild_id:param.guildId, user_id: param.userId, stock_name: param.stockName, amount: param.count});
             }else{ //이미 구매한 주식이면 업데이트
                 await DbManager.knex('user_stocks').update({amount: parseInt(userStock.amount) + parseInt(param.count)}).where({guild_id:param.guildId, user_id: param.userId, stock_name: param.stockName});
+                await DbManager.knex('wallets').update({coin: wallet.coin - (stock.price * param.count)}).where({guild_id:param.guildId, user_id: param.userId});
+            }
+
+            return 'SUCCESS';
+        }
+        else {
+            return checkGuildResult;
+        }
+    }
+
+    async sellStock(param){
+        let checkGuildResult = await this.checkGuild(param.guildId);
+        
+        if(checkGuildResult == 'READY'){
+            //해당 주식이 있는지 확인
+            let stock = await DbManager.knex.select().from('stocks').where({guild_id: param.guildId, stock_name: param.stockName}).first();
+
+            if(typeof stock == 'undefined'){
+                return 'STOCK_NOT_FOUND';
+            }
+            
+            //유저가 지갑이 있는지 확인
+            let wallet = await DbManager.knex.select().from('wallets').where({guild_id: param.guildId, user_id: param.userId}).first();
+            if(typeof wallet == 'undefined'){
+                return 'WALLET_NOT_FOUND';
+            }
+
+            //판매 진행
+            //해당 유저가 이미 구매한 주식인지 확인
+            let userStock = await DbManager.knex.select().from('user_stocks').where({guild_id:param.guildId, user_id: param.userId, stock_name: param.stockName}).first();
+
+            if(typeof userStock == 'undefined') { //구매한 주식이 아니면 판매 불가
+                return 'HAS_NOT_STOCK';
+            }
+            
+            if(userStock.amount < param.count){
+                return 'NOT_STOCK_ENOUGH';
+            }
+            else{ //구매한 주식이면 업데이트
+                //주식수량 감소
+                await DbManager.knex('user_stocks').update({amount: parseInt(userStock.amount) - parseInt(param.count)}).where({guild_id:param.guildId, user_id: param.userId, stock_name: param.stockName});
+                //코인 증가
+                await DbManager.knex('wallets').update({coin: wallet.coin + (stock.price * param.count)}).where({guild_id:param.guildId, user_id: param.userId});
             }
 
             return 'SUCCESS';

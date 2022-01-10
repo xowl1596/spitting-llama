@@ -156,10 +156,11 @@ module.exports = class LlamaBot{
         }
 
         if(message.content.startsWith('라마코인 주식 구매')){
-            let messageSplit = message.content.split(' ');
-            if(messageSplit.length != 5) {
+            let buyMessageSplit = message.content.split(' ');
+            if(buyMessageSplit.length != 5) {
                 message.channel.send("명령어가 맞지 않습니다 : 라마코인 주식 구매 <주식이름> <수량>")
-            }else {
+            }
+            else {
                 let stockBuyParam = {
                     guildId : message.guild.id,
                     userId : message.member.user.id,
@@ -168,14 +169,26 @@ module.exports = class LlamaBot{
                 }
 
                 let buyStockResult = await this.dbManager.buyStock(stockBuyParam);
-                let msg = this.gerBuyStockMessage(buyStockResult);
+                let msg = this.getBuyStockMessage(buyStockResult);
                 message.channel.send(msg);
             }
-
-            message.channel.send('준비중');
         }
         
         if(message.content.startsWith('라마코인 주식 판매')){
+            let sellMessageSplit = message.content.split(' ');
+            if(sellMessageSplit.length != 5) {
+                message.channel.send("명령어가 맞지 않습니다 : 라마코인 주식 구매 <주식이름> <수량>")
+            }
+            else {
+                let stockSellParam = {
+                    guildId : message.guild.id,
+                    userId : message.member.user.id,
+                    stockName : messageSplit[3],
+                    count : messageSplit[4]
+                }
+
+
+            }
             message.channel.send('준비중');
         }
     }
@@ -275,8 +288,12 @@ module.exports = class LlamaBot{
         return msg;
     }
 
-    gerBuyStockMessage(result){
+    getBuyStockMessage(result){
         switch(result){
+            case 'INACTIVE' :
+                return `시스템이 비활성화 상태입니다. '라마코인 활성화'를 입력해  시스템을 활성화 시켜야 합니다.`
+            case 'NO_REGIST' :
+                return `라마코인 시스템에 서버를 등록해 주십시오(명령어 : 라마코인 등록).`
             case 'STOCK_NOT_FOUND':
                 return '주식을 찾을 수 없습니다.';
             case 'WALLET_NOT_FOUND':
@@ -285,6 +302,25 @@ module.exports = class LlamaBot{
                 return '코인이 부족하잖아 퉤엣!!!';
             case 'SUCCESS' :
                 return '주식을 구매하였습니다.'
+        }
+    }
+
+    getSellStockMessage(result){
+        switch(result){
+            case 'INACTIVE' :
+                return `시스템이 비활성화 상태입니다. '라마코인 활성화'를 입력해  시스템을 활성화 시켜야 합니다.`
+            case 'NO_REGIST' :
+                return `라마코인 시스템에 서버를 등록해 주십시오(명령어 : 라마코인 등록).`
+            case 'STOCK_NOT_FOUND':
+                return '주식을 찾을 수 없습니다.';
+            case 'WALLET_NOT_FOUND':
+                return '지갑이 없습니다.';
+            case 'HAS_NOT_STOCK':
+                return '구매한 주식이 없잖아 퉤엣!!!';
+            case 'NOT_STOCK_ENOUGH':
+                return '가지고 있는게 모자라잖아 퉤엣!!';
+            case 'SUCCESS' :
+                return '주식을 판매하였습니다.';
         }
     }
 }
