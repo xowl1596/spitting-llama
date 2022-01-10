@@ -225,6 +225,18 @@ module.exports = class DbManager{
             if (wallet.coin <stock.price * param.count ){
                 return 'CANNOT_BUY'
             }
+
+            //구매 진행
+            //해당 유저가 이미 구매한 주식인지 확인
+            let userStock = await DbManager.knex.select().from('uset_stocks').where({guild_id:param.guildId, user_id: param.userId, stock_name: param.stockName}).first();
+            console.log(userStock);
+            if(typeof userStock == 'undefined') { //구매한 주식이 아니면 생성
+                await DbManager.knex('user_stocks').insert({guild_id:param.guildId, user_id: param.userId, stock_name: param.stockName, amount: param.count});
+            }else{ //이미 구매한 주식이면 업데이트
+                await DbManager.knex('user_stocks').update({amount: userStock.amount + param.count}).where({guild_id:param.guildId, user_id: param.userId, stock_name: param.stockName});
+            }
+
+            return 'SUCCESS';
         }
         else {
             return checkGuildResult;

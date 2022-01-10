@@ -283,7 +283,8 @@ module.exports = class LlamaBot{
                 return '지갑이 없습니다.';
             case 'CANNOT_BUY':
                 return '코인이 부족하잖아 퉤엣!!!';
-            
+            case 'SUCCESS' :
+                return '주식을 구매하였습니다.'
         }
     }
 }
