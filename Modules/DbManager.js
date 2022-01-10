@@ -269,7 +269,7 @@ module.exports = class DbManager{
                 return 'HAS_NOT_STOCK';
             }
             
-            if(userStock.amount < param.count){
+            if(parseInt(userStock.amount) < parseInt(param.count)){
                 return 'NOT_STOCK_ENOUGH';
             }
             else{ //구매한 주식이면 업데이트
