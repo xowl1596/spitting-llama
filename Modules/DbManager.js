@@ -222,7 +222,7 @@ module.exports = class DbManager{
                 return 'WALLET_NOT_FOUND';
             }
             //유저가 돈이 충분한지 확인
-            if (wallet.coin <stock.price * param.count ){
+            if (wallet.coin < stock.price * param.count ){
                 return 'CANNOT_BUY'
             }
 
@@ -234,7 +234,7 @@ module.exports = class DbManager{
                 await DbManager.knex('user_stocks').insert({guild_id:param.guildId, user_id: param.userId, stock_name: param.stockName, amount: param.count});
             }else{ //이미 구매한 주식이면 업데이트
                 await DbManager.knex('user_stocks').update({amount: parseInt(userStock.amount) + parseInt(param.count)}).where({guild_id:param.guildId, user_id: param.userId, stock_name: param.stockName});
-                await DbManager.knex('wallets').update({coin: wallet.coin - (stock.price * param.count)}).where({guild_id:param.guildId, user_id: param.userId});
+                await DbManager.knex('wallets').update({coin: wallet.coin - (parseInt(stock.price) * parseInt(param.count))}).where({guild_id:param.guildId, user_id: param.userId});
             }
 
             return 'SUCCESS';
@@ -276,7 +276,7 @@ module.exports = class DbManager{
                 //주식수량 감소
                 await DbManager.knex('user_stocks').update({amount: parseInt(userStock.amount) - parseInt(param.count)}).where({guild_id:param.guildId, user_id: param.userId, stock_name: param.stockName});
                 //코인 증가
-                await DbManager.knex('wallets').update({coin: wallet.coin + (stock.price * param.count)}).where({guild_id:param.guildId, user_id: param.userId});
+                await DbManager.knex('wallets').update({coin: wallet.coin - (parseInt(stock.price) * parseInt(param.count))}).where({guild_id:param.guildId, user_id: param.userId});
             }
 
             return 'SUCCESS';
