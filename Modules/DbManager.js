@@ -208,7 +208,7 @@ module.exports = class DbManager{
     async buyStock(param){
         let checkGuildResult = await this.checkGuild(param.guildId);
         
-        if(result == 'READY'){
+        if(checkGuildResult == 'READY'){
             //주식구매
             //해당 주식이 있는지 확인
             let stock = DbManager.knex.select().from('stocks').where({guild_id: param.guildId, stock_name: param.stockName}).first();
