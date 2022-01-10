@@ -288,7 +288,19 @@ module.exports = class DbManager{
 
     async getStockList(param){
         let stockList = await DbManager.knex.select().from('user_stocks').where({guild_id: param.guildId, user_id: param.userId});
-        console.log(stockList);
         return stockList; 
+    }
+
+    async updateStockPrice(){
+        let stockList = await DbManager.knex.select().from('stocks');
+
+        for(let i=0; i < stockList.length; i++){
+            let price = Math.floor(Math.random() * 101); 
+            let chk = Math.floor(Math.random() * 100);
+            if(chk >= 50){
+                price *= -1
+            }
+            DbManager.knex('stocks').update({price : parseInt(stockList[i].price) + price}).where({guild_id: stockList[i].guild_id, stock_name: stockList[i].stock_name});
+        }
     }
 }

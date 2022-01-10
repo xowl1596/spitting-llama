@@ -198,7 +198,6 @@ module.exports = class LlamaBot{
                 guildId : message.guild.id,
                 userId : message.member.user.id
             }
-            console.log(stockListParam);
             let stockList = await this.dbManager.getStockList(stockListParam);
             let msg = `${message.member.user.username}님의 주식=======================` + '\n';
             for(let i=0; i < stockList.length; i++){
