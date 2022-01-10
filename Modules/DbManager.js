@@ -234,7 +234,7 @@ module.exports = class DbManager{
                 await DbManager.knex('user_stocks').insert({guild_id:param.guildId, user_id: param.userId, stock_name: param.stockName, amount: param.count});
             }else{ //이미 구매한 주식이면 업데이트
                 await DbManager.knex('user_stocks').update({amount: parseInt(userStock.amount) + parseInt(param.count)}).where({guild_id:param.guildId, user_id: param.userId, stock_name: param.stockName});
-                await DbManager.knex('wallets').update({coin: wallet.coin - (parseInt(stock.price) * parseInt(param.count))}).where({guild_id:param.guildId, user_id: param.userId});
+                await DbManager.knex('wallets').update({coin: parseInt(wallet.coin) - (parseInt(stock.price) * parseInt(param.count))}).where({guild_id:param.guildId, user_id: param.userId});
             }
 
             return 'SUCCESS';
@@ -300,7 +300,6 @@ module.exports = class DbManager{
             if(chk >= 50){
                 price *= -1
             }
-            console.log(price);
             await DbManager.knex('stocks').update({price : parseInt(stockList[i].price) + price}).where({guild_id: stockList[i].guild_id, stock_name: stockList[i].stock_name});
         }
     }
