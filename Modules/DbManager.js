@@ -223,7 +223,7 @@ module.exports = class DbManager{
             }
             //유저가 돈이 충분한지 확인
             if (wallet.coin <stock.price * param.count ){
-
+                return 'CANNOT_BUY'
             }
         }
         else {

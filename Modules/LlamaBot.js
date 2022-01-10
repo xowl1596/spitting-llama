@@ -281,6 +281,8 @@ module.exports = class LlamaBot{
                 return '주식을 찾을 수 없습니다.';
             case 'WALLET_NOT_FOUND':
                 return '지갑이 없습니다.';
+            case 'WALLET_NOT_FOUND':
+                return '코인이 부족하잖아 퉤엣!!!';
             
         }
     }
