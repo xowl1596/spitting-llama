@@ -211,7 +211,7 @@ module.exports = class DbManager{
         if(checkGuildResult == 'READY'){
             //주식구매
             //해당 주식이 있는지 확인
-            let stock = DbManager.knex.select().from('stocks').where({guild_id: param.guildId, stock_name: param.stockName}).first();
+            let stock = await DbManager.knex.select().from('stocks').where({guild_id: param.guildId, stock_name: param.stockName}).first();
             console.log(stock);
             //유저가 지갑이 있는지 확인
             //유저가 돈이 충분한지 확인
