@@ -285,4 +285,9 @@ module.exports = class DbManager{
             return checkGuildResult;
         }
     }
+
+    async getStockList(param){
+        let stockList = DbManager.knex.select().from('user_stocks').where({guild_id: param.guildId, user_id: param.userid});
+        return stockList; 
+    }
 }
