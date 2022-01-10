@@ -168,7 +168,7 @@ module.exports = class LlamaBot{
                 }
 
                 let buyStockResult = await this.dbManager.buyStock(stockBuyParam);
-                let msg = this.
+                let msg = this.gerBuyStockMessage(buyStockResult);
             }
 
             message.channel.send('준비중');
