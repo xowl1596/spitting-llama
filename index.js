@@ -7,7 +7,7 @@ require("dotenv").config();
 
 setInterval(()=>{
   DbManager.updateStockPrice();
-}, 1000);
+}, 60000);
 
 let llama = new Llamabot();
 
