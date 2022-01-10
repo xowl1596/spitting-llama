@@ -228,7 +228,7 @@ module.exports = class DbManager{
 
             //구매 진행
             //해당 유저가 이미 구매한 주식인지 확인
-            let userStock = await DbManager.knex.select().from('uset_stocks').where({guild_id:param.guildId, user_id: param.userId, stock_name: param.stockName}).first();
+            let userStock = await DbManager.knex.select().from('user_stocks').where({guild_id:param.guildId, user_id: param.userId, stock_name: param.stockName}).first();
             console.log(userStock);
             if(typeof userStock == 'undefined') { //구매한 주식이 아니면 생성
                 await DbManager.knex('user_stocks').insert({guild_id:param.guildId, user_id: param.userId, stock_name: param.stockName, amount: param.count});
