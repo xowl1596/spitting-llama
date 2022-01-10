@@ -187,7 +187,7 @@ module.exports = class LlamaBot{
                     count : sellMessageSplit[4]
                 }
 
-                let sellStockResult = await this.dbManager.buyStock(stockSellParam);
+                let sellStockResult = await this.dbManager.sellStock(stockSellParam);
                 let msg = this.getSellStockMessage(sellStockResult);
                 message.channel.send(msg);
             }
