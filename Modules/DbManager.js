@@ -201,6 +201,7 @@ module.exports = class DbManager{
     }
 
     async getStockList(guildId){
+        console.log(guildId)
         let stocks = await DbManager.knex.select().from('stocks').where('guild_id', guildId);
         return stocks;
     }
