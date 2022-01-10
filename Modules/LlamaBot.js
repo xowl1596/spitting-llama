@@ -169,6 +169,7 @@ module.exports = class LlamaBot{
 
                 let buyStockResult = await this.dbManager.buyStock(stockBuyParam);
                 let msg = this.gerBuyStockMessage(buyStockResult);
+                message.channel.send(msg);
             }
 
             message.channel.send('준비중');
@@ -278,6 +279,8 @@ module.exports = class LlamaBot{
         switch(result){
             case 'STOCK_NOT_FOUND':
                 return '주식을 찾을 수 없습니다.';
+            case 'WALLET_NOT_FOUND':
+                return '지갑이 없습니다.';
             
         }
     }

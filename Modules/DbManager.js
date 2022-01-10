@@ -222,8 +222,9 @@ module.exports = class DbManager{
                 return 'WALLET_NOT_FOUND';
             }
             //유저가 돈이 충분한지 확인
-            console.log(wallet.coin)
-            console.log(stock.price * param.count)
+            if (wallet.coin <stock.price * param.count ){
+
+            }
         }
         else {
             return checkGuildResult;
