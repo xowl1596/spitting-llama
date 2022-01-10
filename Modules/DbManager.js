@@ -218,9 +218,12 @@ module.exports = class DbManager{
             
             //유저가 지갑이 있는지 확인
             let wallet = await DbManager.knex.select().from('wallets').where({guild_id: param.guildId, user_id: param.userId}).first();
-            console.log(wallet);
+            if(typeof wallet == 'undefined'){
+                return 'WALLET_NOT_FOUND';
+            }
             //유저가 돈이 충분한지 확인
-            
+            console.log(wallet.coin)
+            console.log(stock.price * param.count)
         }
         else {
             return checkGuildResult;
