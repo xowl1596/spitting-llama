@@ -156,7 +156,7 @@ module.exports = class DbManager{
                 return 'MINING_SUCCESS';
             }
             else{ //채굴 실패
-                let minigFailQuery = `UPDATE wallets SET coin = coin + 10 WHERE guild_id=${guildId} AND user_id=${userId}`;
+                let minigFailQuery = `UPDATE wallets SET coin = coin + 1 WHERE guild_id=${guildId} AND user_id=${userId}`;
                 this.client.query(minigFailQuery);
 
                 return 'MINING_FAIL';
