@@ -287,7 +287,7 @@ module.exports = class DbManager{
         }
     }
 
-    async getStockList(param){
+    async getMyStockList(param){
         let stockList = await DbManager.knex.select().from('user_stocks').where({guild_id: param.guildId, user_id: param.userId});
         return stockList; 
     }
