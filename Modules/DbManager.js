@@ -301,6 +301,12 @@ module.exports = class DbManager{
                 price *= -1
             }
             await DbManager.knex('stocks').update({price : parseInt(stockList[i].price) + price}).where({guild_id: stockList[i].guild_id, stock_name: stockList[i].stock_name});
+            
+            let deleteStockList = await DbManager.knex('stocks').select().whereRaw('price < 0');
+            for(let i=0; i < deleteStockList.length; i++){
+                await DbManager.knex('user_stocks').del().where({guild_id : deleteStockList[i].guild_id, stock_name : deleteStockList[i].stock_name});
+            }
+
             await DbManager.knex('stocks').del().whereRaw('price < 0');
         }
     }
