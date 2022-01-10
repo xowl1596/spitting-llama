@@ -301,6 +301,7 @@ module.exports = class DbManager{
                 price *= -1
             }
             await DbManager.knex('stocks').update({price : parseInt(stockList[i].price) + price}).where({guild_id: stockList[i].guild_id, stock_name: stockList[i].stock_name});
+            await DbManager.knex('stocks').update({price : 50}).whereRaw('price < 50');
         }
     }
 }
