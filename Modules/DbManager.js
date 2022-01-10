@@ -276,7 +276,7 @@ module.exports = class DbManager{
                 //주식수량 감소
                 await DbManager.knex('user_stocks').update({amount: parseInt(userStock.amount) - parseInt(param.count)}).where({guild_id:param.guildId, user_id: param.userId, stock_name: param.stockName});
                 //코인 증가
-                await DbManager.knex('wallets').update({coin: wallet.coin + (parseInt(stock.price) * parseInt(param.count))}).where({guild_id:param.guildId, user_id: param.userId});
+                await DbManager.knex('wallets').update({coin: parseInt(wallet.coin) + (parseInt(stock.price) * parseInt(param.count))}).where({guild_id:param.guildId, user_id: param.userId});
             }
 
             return 'SUCCESS';
