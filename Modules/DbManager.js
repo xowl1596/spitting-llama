@@ -205,4 +205,20 @@ module.exports = class DbManager{
         return stocks;
     }
 
+    async buyStock(param){
+        let checkGuildResult = await this.checkGuild(param.guildId);
+        
+        if(result == 'READY'){
+            //주식구매
+            //해당 주식이 있는지 확인
+            let stock = DbManager.knex.select().from('stocks').where({guild_id: param.guildId, stock_name: param.stockName}).first();
+            console.log(stock);
+            //유저가 지갑이 있는지 확인
+            //유저가 돈이 충분한지 확인
+            
+        }
+        else {
+            return checkGuildResult;
+        }
+    }
 }

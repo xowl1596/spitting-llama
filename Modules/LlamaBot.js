@@ -156,8 +156,20 @@ module.exports = class LlamaBot{
         }
 
         if(message.content.startsWith('라마코인 주식 구매')){
-            let test = message.content.split(' ');
-            console.log(test);
+            let messageSplit = message.content.split(' ');
+            if(messageSplit.length != 5) {
+                message.channel.send("명령어가 맞지 않습니다 : 라마코인 주식 구매 <주식이름> <수량>")
+            }else {
+                let stockBuyParam = {
+                    guildId : message.guild.id,
+                    userId : message.member.user.userId,
+                    stockName : messageSplit[3],
+                    count : messageSplit[4]
+                }
+
+                let buyStockResult = await this.dbManager.buyStock(stockBuyParam);
+            }
+
             message.channel.send('준비중');
         }
         
