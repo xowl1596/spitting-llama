@@ -164,8 +164,8 @@ module.exports = class LlamaBot{
                 let stockBuyParam = {
                     guildId : message.guild.id,
                     userId : message.member.user.id,
-                    stockName : messageSplit[3],
-                    count : messageSplit[4]
+                    stockName : buyMessageSplit[3],
+                    count : buyMessageSplit[4]
                 }
 
                 let buyStockResult = await this.dbManager.buyStock(stockBuyParam);
@@ -183,8 +183,8 @@ module.exports = class LlamaBot{
                 let stockSellParam = {
                     guildId : message.guild.id,
                     userId : message.member.user.id,
-                    stockName : messageSplit[3],
-                    count : messageSplit[4]
+                    stockName : sellMessageSplit[3],
+                    count : sellMessageSplit[4]
                 }
 
 
