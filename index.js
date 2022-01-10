@@ -5,7 +5,7 @@ let schedule = require('node-schedule');
 const DbManager = require('./Modules/DbManager.js');
 require("dotenv").config();
 
-var updateStockPrice = schedule.scheduleJob('1 * * * *', DbManager.updateStockPrice());
+var updateStockPrice = schedule.scheduleJob('1 * * * *', ()=>{DbManager.updateStockPrice();});
 
 let llama = new Llamabot();
 
