@@ -201,7 +201,6 @@ module.exports = class DbManager{
     }
 
     async getStockList(guildId){
-        console.log(guildId)
         let stocks = await DbManager.knex.select().from('stocks').where('guild_id', guildId);
         return stocks;
     }
@@ -301,6 +300,7 @@ module.exports = class DbManager{
             if(chk >= 50){
                 price *= -1
             }
+            console.log(price);
             DbManager.knex('stocks').update({price : parseInt(stockList[i].price) + price}).where({guild_id: stockList[i].guild_id, stock_name: stockList[i].stock_name});
         }
     }
