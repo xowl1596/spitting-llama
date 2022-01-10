@@ -33,9 +33,10 @@ module.exports = class LlamaBot{
             '라마코인 지갑생성 : 해당서버에 자신의 지갑을 생성합니다. 지갑을 생성해야 라마코인 시스템이 사용 가능합니다.\n'+
             '라마코인 잔액확인 : 자신이 얼마나 코인을 가지고 있는지 확인합니다.\n'+
             '라마코인 랭크 : 우리 서버 빌게이츠는 누구?\n'+
-            '라마코인 룰렛 : 200포인트로 도박을 합니다. 잭팟은 12000코인, 당첨되면 250코인입니다. 가즈아~~!\n\n'+
+            '라마코인 룰렛 : 200포인트로 도박을 합니다. 잭팟은 12000코인, 당첨되면 600코인입니다. 가즈아~~!\n\n'+
             '라마코인 주식 목록 : 이 서버에 있는 주식을 보여줍니다.\n'+
-            '라마코인 주식 구매/판매 <주식이름> <개수> : 주식을 구매/판매합니다.'
+            '라마코인 주식 구매/판매 <주식이름> <개수> : 주식을 구매/판매합니다.\n'+
+            '라마코인 주식 확인 : 구매한 주식들을 볼 수 있습니다.'
 
         this.startBot();
     }
@@ -155,6 +156,8 @@ module.exports = class LlamaBot{
         }
 
         if(message.content.startsWith('라마코인 주식 구매')){
+            let test = message.content.split(' ');
+            console.log(test);
             message.channel.send('준비중');
         }
         
@@ -222,7 +225,7 @@ module.exports = class LlamaBot{
         let nonce = Math.floor(Math.random() * 100);
         let miningResult = await this.dbManager.mining(message.guild.id, message.member.user.id, nonce);
         if (miningResult == 'MINING_SUCCESS') {
-            message.channel.send(message.member.user.username + "님이 채굴에 성공하였습니다! 500코인이 지급된니다.");
+            message.channel.send(message.member.user.username + "님이 채굴에 성공하였습니다! 500코인이 지급됩니다.");
         }
     }
     
@@ -240,8 +243,8 @@ module.exports = class LlamaBot{
             message.channel.send('잭팟! 12000포인트 지급!');
             return 11800;
         }else if(roulletNumbers[0]==roulletNumbers[1] || roulletNumbers[0]==roulletNumbers[2] || roulletNumbers[2]==roulletNumbers[1]) {
-            message.channel.send('당첨! 250포인트 지급!');
-            return 50;
+            message.channel.send('당첨! 600포인트 지급!');
+            return 400;
         }
         else{
             message.channel.send('꽝이지롱 퉤엣!');
