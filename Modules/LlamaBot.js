@@ -187,9 +187,10 @@ module.exports = class LlamaBot{
                     count : sellMessageSplit[4]
                 }
 
-
+                let sellStockResult = await this.dbManager.buyStock(stockSellParam);
+                let msg = this.getSellStockMessage(sellStockResult);
+                message.channel.send(msg);
             }
-            message.channel.send('준비중');
         }
     }
 
