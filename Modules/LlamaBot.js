@@ -1,5 +1,6 @@
 const { Client, Intents, CommandInteractionOptionResolver } = require('discord.js');
 const DbManager = require('./DbManager.js');
+const LlamaCommandManger = require('./LlamaCommandManager.js');
 const client = new Client({ intents: [
   Intents.FLAGS.GUILDS, 
   Intents.FLAGS.GUILD_MESSAGES,
@@ -9,6 +10,7 @@ module.exports = class LlamaBot{
     constructor() {
         this.dbManager = new DbManager();
         
+        this.commandManager = new LlamaCommandManger();
         this.cmds = ['캬악', '칵', '카악', '캭'];
         this.imgCmds = ['캬악!', '칵!', '카악!','캭!'];
         this.img2Cmds = ['낼름', '냘름', '핥', '핥짝', '핥쨕'];
@@ -48,7 +50,12 @@ module.exports = class LlamaBot{
           
         client.on('messageCreate', message => {
             this.mining(message);
-            this.processingCommands(message);
+            
+            let msg = this.commandManager(message.content);
+            if(typeof msg != 'undefined'){
+                message.channel.send(msg);
+            }
+
             this.processingLlamacoinCommands(message);
         });
           
