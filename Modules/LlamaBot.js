@@ -50,8 +50,8 @@ module.exports = class LlamaBot{
           
         client.on('messageCreate', message => {
             this.mining(message);
-            
-            let msg = this.commandManager(message.content);
+
+            let msg = this.commandManager.detectCommand(message.content);
             if(typeof msg != 'undefined'){
                 message.channel.send(msg);
             }
