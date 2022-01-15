@@ -35,8 +35,8 @@ module.exports = class LlamaBot{
             this.mining(message);
 
             let msg = this.commandManager.detectCommand(message.content);
-            if(typeof msg != 'undefined'){
-                message.channel.send(msg);
+            if(typeof msg != 'undefined'){ 
+                message.channel.send(msg); 
             }
 
             this.processingLlamacoinCommands(message);
