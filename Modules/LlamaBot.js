@@ -11,23 +11,6 @@ module.exports = class LlamaBot{
         this.dbManager = new DbManager();
         
         this.commandManager = new LlamaCommandManger();
-        this.cmds = ['캬악', '칵', '카악', '캭'];
-        this.imgCmds = ['캬악!', '칵!', '카악!','캭!'];
-        this.img2Cmds = ['낼름', '냘름', '핥', '핥짝', '핥쨕'];
-        
-        this.magicGodong = [
-            '언젠가는','다시 한번 물어봐','그럼!','그래', '당연하지', '물론', '...푸흡!!',
-            '아니','안돼','가만히 있어','그것도 안돼','No','Yes','뭐라고?', '퉤엣'
-        ];
-        
-        this.helpMsg = 
-            '침뱉기 : 캬악 칵 카악 캭 (!붙이면 이미지가 나옵니다.)\n'+
-            '핥기 : 낼름 냘름 핥 핥짝 핥쨕\n'+
-            '경고 : 건들지마!\n'+
-            '고백으로 혼내주기 : 난멋져 난예뻐\n'+
-            '질문 : 마법의 라마고동님 (질문)\n'+
-            '라마코인 도움말 : 라마코인 도움말'+
-            '소스코드 : https://github.com/xowl1596/spitting-llama';  
         
         this.llamacoinHelpMsg = 
             '라마코인 등록 : 라마코인 시스템에 서버를 등록시키고 활성화 합니다.\n'+
@@ -60,41 +43,6 @@ module.exports = class LlamaBot{
         });
           
         client.login(process.env.TOKEN);
-    }
-
-    processingCommands(message){
-        switch (message.content){
-            case '라마도움말' :
-                message.channel.send(this.helpMsg);
-                break;
-            case '건들지마!' :
-                message.channel.send('건들면 침뱉을거야!');
-                break;
-            case '난멋져' :
-                message.channel.send("그대의 눈동자에 치얼쓰");
-                message.channel.send({ files: [{ attachment: './llama3.jpg' }] });
-                break;
-            case '난예뻐' :
-                message.channel.send("그대의 눈동자에 치얼쓰");
-                message.channel.send({ files: [{ attachment: './llama4.jpg' }] });
-                break;
-        }
-    
-        if (message.content.startsWith('마법의 라마고동님')) {
-            message.channel.send(this.magicGodong[Math.floor(Math.random() * this.magicGodong.length)]);
-        }
-    
-        if (this.cmds.includes(message.content)){
-            message.channel.send('퉤엣!');
-        }
-    
-        if (this.imgCmds.includes(message.content)){
-            message.channel.send({ files: [{ attachment: './llama.png' }] });
-        }
-    
-        if (this.img2Cmds.includes(message.content)){
-            message.channel.send({ files: [{ attachment: './llama2.png' }] });
-        }
     }
     
     async processingLlamacoinCommands(message){
@@ -142,24 +90,24 @@ module.exports = class LlamaBot{
                 let stockListMessage = this.createStockListMessage(stockList);
                 message.channel.send(stockListMessage);
                 break;
-            // case '라마코인 룰렛' :
-            //     let checkGuild = await this.dbManager.checkGuild(message.guild.id);
+            case '라마코인 룰렛' :
+                let checkGuild = await this.dbManager.checkGuild(message.guild.id);
 
-            //     if(checkGuild == 'READY'){
-            //         let coin = await this.dbManager.getWallet(message.guild.id, message.member.user.id);
+                if(checkGuild == 'READY'){
+                    let coin = await this.dbManager.getWallet(message.guild.id, message.member.user.id);
                     
-            //         if (coin < 200) {
-            //             message.channel.send('코인이 모자라잖아! 퉷!');
-            //         }
-            //         else {
-            //             let roulletResultCoin = this.roullet(message);
-            //             this.dbManager.proccessRoullet(message.guild.id, message.member.user.id, roulletResultCoin)
-            //         }
-            //     }else {
-            //         message.channel.send('서버가 등록되지 않거나 시스템이 활성화되어있지 않습니다.');
-            //     }
+                    if (coin < 200) {
+                        message.channel.send('코인이 모자라잖아! 퉷!');
+                    }
+                    else {
+                        let roulletResultCoin = this.roullet(message);
+                        this.dbManager.proccessRoullet(message.guild.id, message.member.user.id, roulletResultCoin)
+                    }
+                }else {
+                    message.channel.send('서버가 등록되지 않거나 시스템이 활성화되어있지 않습니다.');
+                }
                 
-            //     break;
+                break;
         }
 
         if(message.content.startsWith('라마코인 주식 구매')){
