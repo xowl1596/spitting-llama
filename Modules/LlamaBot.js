@@ -1,6 +1,7 @@
 const { Client, Intents, CommandInteractionOptionResolver } = require('discord.js');
 const DbManager = require('./DbManager.js');
 const LlamaCommandManger = require('./LlamaCommandManager.js');
+const LlamacoinCommandManager = require('./LlamacoinCommandManager');
 const client = new Client({ intents: [
   Intents.FLAGS.GUILDS, 
   Intents.FLAGS.GUILD_MESSAGES,
@@ -11,7 +12,7 @@ module.exports = class LlamaBot{
         this.dbManager = new DbManager();
         
         this.commandManager = new LlamaCommandManger();
-        
+        this.coinCommandManager = new LlamacoinCommandManager();
         this.llamacoinHelpMsg = 
             '라마코인 등록 : 라마코인 시스템에 서버를 등록시키고 활성화 합니다.\n'+
             '라마코인 활성화 / 비활성화 : 라마코인 시스템을 활성화/비활성화 합니다.\n'+
